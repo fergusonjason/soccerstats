@@ -17,7 +17,7 @@ class StaffManagementScreen extends Component {
     constructor(props) {
         super(props);
 
-        this.db = SQLite.openDatabase({name: "stats.db",createFromLocation: "~soccerstats.db"});
+        //this.db = SQLite.openDatabase({name: "stats.db",createFromLocation: "~soccerstats.db"});
 
         this.state = {staff:[]};
        
@@ -47,7 +47,7 @@ class StaffManagementScreen extends Component {
                 <View style={styles.listArea}>
                     <FlatList data={this.state.staff}
                         renderItem={({item}) => <StaffEntry item={item} />} 
-                        keyExtractor={(item) => item.STAFF_ID }/>
+                        keyExtractor={(item) => item.STAFF_ID.toString() }/>
                 </View>
                 <View style={styles.bottomButtonArea}>
                     <TouchableOpacity style={styles.bottomButton}>

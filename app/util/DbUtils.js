@@ -1,22 +1,10 @@
 import SQLite from "react-native-sqlite-storage";
 
 SQLite.DEBUG(true);
-//SQLite.enablePromise(true);
-//SQLite.enablePromise(false);
 
 open = (dbparams) => {
 
     return SQLite.openDatabase({ name: dbparams.name, createFromLocation: dbparams.createFromLocation });
-    // return new Promise((resolve, reject) => {
-    //     let result = SQLite.openDatabase({ name: dbparams.name, createFromLocation: dbparams.createFromLocation },
-    //         () => {
-    //             console.log("Opened database: " + dbparams.name);
-    //         },
-    //         (err) => {
-    //             console.log("Error opening database: Code: " + err.code + ", message: " + err.message);
-    //         });
-    //     resolve({result});
-    // });
 
 }
 
@@ -36,8 +24,8 @@ query = async (db, sql, params) => {
         console.log("DB is undefined inside query");
     }
 
-    //let result = await db.executeSql(sql, params);
     // figured this out from https://stackoverflow.com/questions/47345000/react-native-handling-async-calls-to-sqllite-db
+    // TODO: Fix this so that it just returns an array, not {result: []}
     return new Promise((resolve, reject) => {
 
         db.transaction((tx) => {
@@ -59,14 +47,14 @@ query = async (db, sql, params) => {
 
 }
 
-// not tested yet!
+
 execute = (db, sql, params) => {
 
     return new Promise((resolve, reject) => {
-        db.transaction((txt) => {
+        db.transaction((tx) => {
             tx.executeSql(sql, params, (tx, rs) => {
                 let rowsAffected = rs.rowsAffected;
-
+                console.log("Rows affected: " + rowsAffected);
                 resolve({ rowsAffected });
             })
         }, (err) => {

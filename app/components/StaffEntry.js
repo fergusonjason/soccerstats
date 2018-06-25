@@ -2,6 +2,8 @@ import React, {Component} from "react";
 import {View, Text, Button, StyleSheet, TouchableOpacity, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 
+import {execute} from "./../util/DbUtils";
+
 class StaffEntry extends Component {
 
     constructor(props) {
@@ -19,10 +21,39 @@ class StaffEntry extends Component {
     }
 
     _btnDelete = () => {
-        Alert.alert("Not implemented",
-        "Staff Member delete not implemented",
-        [{text: "Ok"}])
+        Alert.alert("Confirm",
+            "Are you sure? You will not be able to undo this",
+            [
+                {text: "Cancel"},
+                {text: "Ok", onPress: () => {this._delete}}
+            ]);
+
         //this.props.navigation.navigate(null, {id: this.state.item.STAFF_ID});
+    }
+
+    _delete = async () => {
+
+        console.log("Entered _delete");
+
+        const sql = "DELETE FROM STAFF WHERE STAFF_ID = ?";
+
+        let result = execute(this.db, sql, [this.state.item.STAFF_ID]);
+
+        if (result.rowsAffected == 0) {
+            Alert.alert("Database Error",
+                "No deletions made",
+                [{text: "Ok"}]);
+        }
+    }
+
+    componentDidMount() {
+
+        this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
+    }
+
+    componentWillUnmount() {
+
+        this.db.close();
     }
 
     render() {
