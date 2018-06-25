@@ -12,10 +12,10 @@ class StaffEntry extends Component {
     }
 
     _btnEdit = () => {
-        Alert.alert("Not implemented",
-            "Staff Member edit not implemented",
-            [{text: "Ok"}])
-        //this.props.navigation.navigate(null, {id: this.state.item.STAFF_ID});
+        // Alert.alert("Not implemented",
+        //     "Staff Member edit not implemented",
+        //     [{text: "Ok"}])
+        this.props.navigation.navigate("EditStaffMemberScreen", {id: this.state.item.STAFF_ID});
     }
 
     _btnDelete = () => {
