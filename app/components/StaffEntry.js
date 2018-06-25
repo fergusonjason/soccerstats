@@ -37,7 +37,7 @@ class StaffEntry extends Component {
 
         const sql = "DELETE FROM STAFF WHERE STAFF_ID = ?";
 
-        let result = execute(this.db, sql, [this.state.item.STAFF_ID]);
+        let result = await execute(this.db, sql, [this.state.item.STAFF_ID]);
 
         if (result.rowsAffected == 0) {
             Alert.alert("Database Error",
@@ -46,7 +46,7 @@ class StaffEntry extends Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
     }
