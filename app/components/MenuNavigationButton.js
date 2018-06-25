@@ -30,15 +30,16 @@ class MenuNavigationButton extends Component {
      * Event handler to handle button press event
      */
     _clkOnPress = () => {
-        if (typeof this.props.navigation === "undefined") {
-            console.log("Navigation undefined");
-        }
 
         if (typeof this.props.target === "undefined") {
             console.log("Navigation target undefined");
         }
 
-        this.props.navigation.navigate(this.props.target);
+        if (this.props.targetId) {
+            this.props.navigation.navigate(this.props.target, {id: this.props.targetId});
+        } else {
+            this.props.navigation.navigate(this.props.target);
+        }
 
     }
 
