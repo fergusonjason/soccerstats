@@ -1,6 +1,7 @@
 import React,{Component} from "react";
 import {View, Text, FlatList, TouchableOpacity} from "react-native";
 import SQLite from "react-native-sqlite-storage";
+import {withNavigation} from "react-navigation";
 
 import StaffEntry from "./../../components/StaffEntry";
 
@@ -21,6 +22,10 @@ class StaffManagementScreen extends Component {
 
         this.state = {staff:[]};
        
+    }
+
+    _btnAddStaff = () => {
+        this.props.navigation.navigate("AddStaffMemberScreen");
     }
 
     async componentDidMount() {
@@ -50,7 +55,8 @@ class StaffManagementScreen extends Component {
                         keyExtractor={(item) => item.STAFF_ID.toString() }/>
                 </View>
                 <View style={styles.bottomButtonArea}>
-                    <TouchableOpacity style={styles.bottomButton}>
+                    <TouchableOpacity style={styles.bottomButton}
+                        onPress={this._btnAddStaff}>
                         <Text style={styles.bottomButtonText}>Add Staff Member</Text>
                     </TouchableOpacity>
                 </View>
@@ -59,4 +65,4 @@ class StaffManagementScreen extends Component {
     }
 }
 
-export default StaffManagementScreen;
+export default withNavigation(StaffManagementScreen);
