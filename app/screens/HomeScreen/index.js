@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { View} from "react-native";
-import {withNavigation} from "react-navigation";
 
 import MenuNavigationButton from "./../../components/MenuNavigationButton";
 import styles from "./styles";
