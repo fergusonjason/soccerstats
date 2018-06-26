@@ -3,14 +3,27 @@ import {StyleSheet} from "react-native";
 export default styles = StyleSheet.create({
     component: {
         flex: 1,
-        backgroundColor: "#ffffff"
+        flexDirection: "column"
     },
-    divisionSection: {},
-    bottomButtonSection: {
+    listArea: {
+        flexDirection: "row"
+    },
+    bottomButtonArea: {
+        alignSelf: "center",
         position: "absolute",
-        bottom: 35,
-        alignSelf: "center"
-
+        bottom: 30
     },
-    buttonButton: {}
-})
+    bottomButton: {
+        padding:10,
+        backgroundColor: '#202646',
+        borderRadius: 10,
+        alignSelf: "center",
+        width: 200,
+        justifyContent: "center"
+    },
+    bottomButtonText: {
+        fontSize:16,
+        color: '#ffffff',
+        textAlign: 'center'
+    }
+});

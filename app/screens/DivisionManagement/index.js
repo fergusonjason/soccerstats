@@ -1,47 +1,57 @@
 import React, {Component} from "react";
-import {View} from "react-native";
+import {View, FlatList} from "react-native";
+import {withNavigation} from "react-navigation";
 
-import MenuNavigationButton from "./../../components/MenuNavigationButton";
-
-import {open, query} from "./../../util/DbUtils";
+import {open,query,close} from "./../../util/DbUtils";
 
 import styles from "./styles";
+import DivisionManagementRow from "./DivisionManagementRow";
+import MenuNavigationButton from "./../../components/MenuNavigationButton";
 
-class DivisionManagementScreen extends Component {
+class DivisionManagmementScreen extends Component {
 
     constructor(props) {
         super(props);
 
-        this.state = {divisions:[]};
+        this.state = {
+            divisions: []
+        };
     }
 
     async componentDidMount() {
+
+        let programId = this.props.navigation.getParam("programId", 1);
+
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
 
-        const sql = "SELECT * FROM DIVISION ORDER BY DIVISION_NAME";
-        let result = await query(this.db, sql,[]);
+        const sql = "SELECT * FROM DIVISION where DIVISION_PROGRAM_ID = ? ORDER BY DIVISION_NAME";
+
+        let result = await query(this.db, sql, [programId]); 
 
         this.setState({divisions: result.result});
     }
 
     async componentWillUnmount() {
-        this.db.close();
+        await close(this.db);
     }
 
     render() {
         return (
             <View style={styles.component}>
-                <View style={styles.divisionSection}>
-                {
-                    this.state.divisions.map((division) => <MenuNavigationButton label={division.DIVISION_NAME} target="TeamManagementScreen" targetId={division.DIVISION_ID.toString()}/>)
-                }
+                <View style={styles.listArea}>
+                    <FlatList 
+                        data={this.state.divisions}
+                        renderItem={(division) => <DivisionManagementRow division={division} />}
+                        keyExtractor={(item) => item.DIVISION_ID.toString() }/>
                 </View>
-                <View style={styles.bottomButtonSection}>
-                    <MenuNavigationButton label="Add Division" target="AddDivisionScreen" />
+                <View style={styles.bottomButtonArea}>
+                    <View style={styles.bottomButtonSection}>
+                        <MenuNavigationButton label="Add Division" target="AddDivisionScreen" />
+                    </View>
                 </View>
             </View>
         );
     }
 }
 
-export default DivisionManagementScreen;
+export default withNavigation(DivisionManagmementScreen);
