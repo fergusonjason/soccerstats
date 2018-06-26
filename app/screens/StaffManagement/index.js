@@ -3,7 +3,8 @@ import {View, Text, FlatList, TouchableOpacity} from "react-native";
 import SQLite from "react-native-sqlite-storage";
 import {withNavigation} from "react-navigation";
 
-import StaffEntry from "./../../components/StaffEntry";
+//import StaffEntry from "./../../components/StaffEntry";
+import StaffManagementRow from "./StaffManagementRow";
 
 import {open, query, close} from "./../../util/DbUtils";
 
@@ -18,8 +19,6 @@ class StaffManagementScreen extends Component {
     constructor(props) {
         super(props);
 
-        //this.db = SQLite.openDatabase({name: "stats.db",createFromLocation: "~soccerstats.db"});
-
         this.state = {staff:[]};
        
     }
@@ -32,7 +31,6 @@ class StaffManagementScreen extends Component {
 
         const sql = "SELECT * FROM STAFF";
 
-        // Promise<SQLiteDatabase>
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
         let result = await query(this.db, sql, []);
         console.log("Result: " + JSON.stringify(result.result));
@@ -42,7 +40,7 @@ class StaffManagementScreen extends Component {
 
     componentWillUnmount() {
 
-        this.db.close();
+        close(this.db);
         
     }
 
@@ -51,7 +49,7 @@ class StaffManagementScreen extends Component {
             <View style={styles.component}>
                 <View style={styles.listArea}>
                     <FlatList data={this.state.staff}
-                        renderItem={({item}) => <StaffEntry item={item} />} 
+                        renderItem={({item}) => <StaffManagementRow staffMember={item} />} 
                         keyExtractor={(item) => item.STAFF_ID.toString() }/>
                 </View>
                 <View style={styles.bottomButtonArea}>
