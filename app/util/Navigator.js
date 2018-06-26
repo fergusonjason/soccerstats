@@ -7,6 +7,7 @@ import EditStaffMemberScreen from "./../screens/EditStaffMemberScreen";
 import AddStaffMemberScreen from "./../screens/AddStaffMember";
 import AddDivisionScreen from "./../screens/AddDivision";
 import TeamManagementScreen from "./../screens/TeamManagement";
+import EditDivisionScreen from "./../screens/EditDivision";
 
 // create the navigator
 
@@ -17,7 +18,8 @@ const Navigator = createStackNavigator({
     EditStaffMemberScreen: {screen: EditStaffMemberScreen, navigationOptions: {title: "Edit Staff Member"}},
     AddStaffMemberScreen: {screen: AddStaffMemberScreen, navigationOptions: {title: "Add Staff Member"}},
     AddDivisionScreen: {screen: AddDivisionScreen, navigationOptions: {title: "Add Division"}},
-    TeamManagementScreen: {screen: TeamManagementScreen, navigationOptions: {title: "Team Management"}}
+    TeamManagementScreen: {screen: TeamManagementScreen, navigationOptions: {title: "Team Management"}},
+    EditDivisionScreen: {screen: EditDivisionScreen, navigationOptions: {title: "Edit Division"}}
 });
 
 export default Navigator;
