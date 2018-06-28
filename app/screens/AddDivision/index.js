@@ -1,7 +1,8 @@
 import React, {Component} from "react";
 import {View, Text, TextInput, TouchableOpacity, Alert} from "react-native";
+import {withNavigation} from "react-navigation";
 
-import {open, execute} from "./../../util/DbUtils";
+import {open, execute, close} from "./../../util/DbUtils";
 
 import styles from "./styles";
 
@@ -13,23 +14,16 @@ class AddDivisionScreen extends Component {
         this.state = {DIVISION_NAME: ""};
     }
 
-    async componentDidMount() {
+    _btnAdd = async () => {
+
+        console.log("Entered _btnAdd");
 
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-
-    }
-
-    async componentWillUnmount() {
-
-        await this.db.close();
-    }
-
-    _btnAdd = async () => {
 
         // TODO: don't hard-code the 1
         const sql = "INSERT INTO DIVISION(DIVISION_NAME, DIVISION_PROGRAM_ID) VALUES(?, 1)";
         let result = await execute(this.db, sql, [this.state.DIVISION_NAME]);
-
+        
         console.log("Result: " + JSON.stringify(result));
         if (result.rowsAffected == 0) {
             Alert.alert(
@@ -43,7 +37,10 @@ class AddDivisionScreen extends Component {
             console.log("Rows affected: " + result.rowsAffected);
         }
 
-        this.props.navigation.navigate("DivisionManagementScreen");
+        close(this.db);
+
+        this.props.navigation.state.params.refresh();
+        this.props.navigation.navigate("DivisionManagementScreen",{programId: 1});
     }
 
     render() {
@@ -64,4 +61,4 @@ class AddDivisionScreen extends Component {
     }
 }
 
-export default AddDivisionScreen;
+export default withNavigation(AddDivisionScreen);
