@@ -9,11 +9,13 @@ open = (dbparams) => {
 }
 
 close = (db) => {
+
     db.close(() => {
         console.log("Database closed")
     }, (err) => {
-        console.warn("Error closing database: Code: " + err.code + ", message: " + err.message);
+        console.warn("Error closing database: Code: " + err.code + ", message: " + err.message + "(" + JSON.stringify(err) + ")");
     });
+
 }
 
 query = async (db, sql, params) => {
@@ -26,10 +28,11 @@ query = async (db, sql, params) => {
 
     // figured this out from https://stackoverflow.com/questions/47345000/react-native-handling-async-calls-to-sqllite-db
     // TODO: Fix this so that it just returns an array, not {result: []}
-    return new Promise((resolve, reject) => {
+    let queryResult = new Promise((resolve, reject) => {
 
-        db.transaction((tx) => {
+        db.readTransaction((tx) => {
             console.log("Beginning transaction");
+
             tx.executeSql(sql, params, (tx, rs) => {
                 let length = rs.rows.length;
                 let result = [];
@@ -39,37 +42,36 @@ query = async (db, sql, params) => {
                 }
 
                 resolve({ result });
-            }, (err) => { console.log("Error in transaction: code: " + err.code + ", message: " + err.message) });
-
-
+            }, (err) => { console.log("Error in executing sql: code: " + err.code + ", message: " + err.message + "(" + JSON.stringify(err) + ")") });
         });
     });
 
+    return await queryResult;
 }
 
 
-execute = (db, sql, params) => {
+execute = async (db, sql, params) => {
 
-    return new Promise((resolve, reject) => {
+    console.log("Entered execute()");
+
+    let result =  new Promise((resolve, reject) => {
         db.transaction((tx) => {
+            console.log("Beginning transaction");
             tx.executeSql(sql, params, (tx, rs) => {
                 let rowsAffected = rs.rowsAffected;
-                console.log("Rows affected: " + rowsAffected);
+                
                 resolve({ rowsAffected });
+                console.log("Rows affected: " + rowsAffected);
             })
         }, (err) => {
-            console.log("Error in transaction: code: " + err.code + ", message: " + err.message);
+            console.log("Error in executing sql: code: " + err.code + ", message: " + err.message + "(" + JSON.stringify(err) + ")")
         });
     });
 
-}
+    let queryResult = await result;
+    console.log("Exiting execute(), queryResult: " + JSON.stringify(result));
+    return queryResult;
 
-close = (db) => {
-    db.close(() => {
-        console.log("Database closed")
-    }, (err) => {
-        console.log("Unable to close database: code: "+ err.code + ", message: " + err.message);
-    });
 }
 
 export { open, close, query, execute };
