@@ -19,10 +19,6 @@ class MenuNavigationButton extends Component {
      */
     constructor(props) {
         super(props);
-        if (_.isNil(this.props.navigation)) {
-            console.warn("No StackNavigator passed to component");
-        }
-
     }
 
 
@@ -30,11 +26,11 @@ class MenuNavigationButton extends Component {
      * Event handler to handle button press event
      */
     _clkOnPress = () => {
-
-        if (typeof this.props.target === "undefined") {
-            console.log("Navigation target undefined");
+        
+        if (this.props.onTransition) {
+            this.props.onTransition();
         }
-
+        
         if (this.props.targetId) {
             this.props.navigation.navigate(this.props.target, {id: this.props.targetId});
         } else {
