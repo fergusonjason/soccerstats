@@ -1,10 +1,12 @@
 import React, {Component} from "react";
-import {View, FlatList} from "react-native";
+import {View, FlatList, TouchableOpacity, Text, StyleSheet, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 
 import {open,query,close} from "./../../util/DbUtils";
 
 import styles from "./styles";
+import dataEntryStyles from "./../../styles/DataEntryPageStyles";
+
 import DivisionManagementRow from "./DivisionManagementRow";
 import MenuNavigationButton from "./../../components/MenuNavigationButton";
 
@@ -14,25 +16,105 @@ class DivisionManagmementScreen extends Component {
         super(props);
 
         this.state = {
-            divisions: []
+            programId: this.props.navigation.getParam("programId", 1),
+            divisions: [],
+            toggle: true
         };
+
+        
     }
 
     async componentDidMount() {
 
-        let programId = this.props.navigation.getParam("programId", 1);
+        console.log("Entered componentDidMount()");
 
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-
-        const sql = "SELECT * FROM DIVISION where DIVISION_PROGRAM_ID = ? ORDER BY DIVISION_NAME";
-
-        let result = await query(this.db, sql, [programId]); 
-
+        let result = await this._queryDivisions(); // initially populate the divisions
         this.setState({divisions: result.result});
+        console.log("State after componentDidMount(): " + JSON.stringify(this.state));
     }
 
     async componentWillUnmount() {
+
+        console.log("Entered componentWillUnount()");
+
         await close(this.db);
+    }
+
+    _queryDivisions = async () => {
+
+        const sql = "SELECT * FROM DIVISION where DIVISION_PROGRAM_ID = ? ORDER BY DIVISION_NAME";
+
+        let result = await query(this.db, sql, [this.state.programId]); 
+
+        return result;
+
+    }
+
+    _addTeam = async () => {
+
+        console.log("Entered _addTeam()");
+        
+        Alert.alert("Not implemented",
+        "Not implemented yet",
+        [{text: "Ok"}]);
+
+
+    }
+
+    _addDivision = () => {
+
+        console.log("Entered _addDivision");
+
+        this.props.navigation.navigate("AddDivisionScreen", {refresh: () => this._requery()});
+    }
+
+    _editDivision = async (divisionId) => {
+
+        console.log("Entered _editDivision");
+
+        this.props.navigation.navigate("EditDivisionScreen", {divisionId: divisionId, refresh: () => this._requery()});
+
+    }
+
+
+
+    _deleteDivision = async (divisionId) => {
+
+        console.log("Entered _deleteDivision, divisionId: " + divisionId);
+
+        const sql = "DELETE FROM DIVISION WHERE DIVISION_ID = ?";
+
+        let result = await execute(this.db, sql, [divisionId]);
+
+        console.log("Rows affected: " + result.rowsAffected);
+
+        console.log("Exited _deleteDivision");
+
+    }
+
+    _btnDeleteDivision = async (divisionId) => {
+
+        console.log("Entered _btnDeleteDivision, divisionId: " + divisionId);
+        await this._deleteDivision(divisionId);
+        let result = await this._queryDivisions();
+        this.setState({divisions: result.result});
+
+        console.log("Exited _btnDeleteDivision");
+    }
+
+    _renderItem = ({item}) => (
+        <DivisionManagementRow divisionId={item.DIVISION_ID} divisionName={item.DIVISION_NAME}
+            onAddTeam={() => {this._addTeam()}}
+            onEdit={() => {this._editDivision(item.DIVISION_ID)}}
+            onDelete={() => {this._btnDeleteDivision(item.DIVISION_ID)}}/>        
+     
+    );
+
+    _requery = async () => {
+
+        let result = await this._queryDivisions();
+        this.setState({divisions: result.result});
     }
 
     render() {
@@ -41,12 +123,16 @@ class DivisionManagmementScreen extends Component {
                 <View style={styles.listArea}>
                     <FlatList 
                         data={this.state.divisions}
-                        renderItem={(division) => <DivisionManagementRow division={division} />}
-                        keyExtractor={(item) => item.DIVISION_ID.toString() }/>
+                        renderItem={this._renderItem}
+                        keyExtractor={(item) => item.DIVISION_ID.toString() }
+                        extraData={this.state.toggle}/>
                 </View>
                 <View style={styles.bottomButtonArea}>
                     <View style={styles.bottomButtonSection}>
-                        <MenuNavigationButton label="Add Division" target="AddDivisionScreen" />
+                        <TouchableOpacity style={styles.button}
+                            onPress={() => {this._addDivision()}}>
+                            <Text style={styles.buttonText}>Add Division</Text>
+                        </TouchableOpacity>
                     </View>
                 </View>
             </View>
