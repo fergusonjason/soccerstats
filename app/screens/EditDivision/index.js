@@ -5,6 +5,7 @@ import {withNavigation} from "react-navigation";
 import {open,query, execute, close} from "./../../util/DbUtils";
 
 import styles from "./styles";
+import dataEntryStyles from "./../../styles/DataEntryPageStyles";
 
 class EditDivisionScreen extends Component {
 
@@ -46,7 +47,8 @@ class EditDivisionScreen extends Component {
                 {text: "Ok"}
             ]);
         } else {
-            this.props.navigation.navigate("DivisionManagementScreen");
+            this.props.navigation.state.params.refresh();
+            this.props.navigation.navigate("DivisionManagementScreen", {programId: 1});
         }
         
 
@@ -54,16 +56,16 @@ class EditDivisionScreen extends Component {
 
     render() {
         return (
-            <View style={styles.component}>
-                <View style={styles.inputArea}>
-                    <Text style={styles.text}>Division Name</Text>
+            <View style={dataEntryStyles.component}>
+                <View style={dataEntryStyles.textSection}>
+                    <Text style={dataEntryStyles.textSectionText}>Division Name</Text>
                     <TextInput value={this.state.DIVISION_NAME} 
                         onChangeText={(text) => this.setState({DIVISION_NAME: text})}/>
                 </View>
-                <View style={styles.bottomButtonArea}>
-                    <TouchableOpacity style={styles.bottomButton}
-                            onPress={this._btnUpdate}>
-                            <Text style={styles.bottomButtonText}>Update Staff Member</Text>
+                <View style={dataEntryStyles.buttonSection}>
+                    <TouchableOpacity style={dataEntryStyles.button}
+                            onPress={() => {this_btnUpdate()}}>
+                            <Text style={dataEntryStyles.buttonText}>Update Division</Text>
                         </TouchableOpacity>
                 </View>
             </View>
