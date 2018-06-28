@@ -4,7 +4,6 @@ import {withNavigation} from "react-navigation";
 
 import {open,query, execute, close} from "./../../util/DbUtils";
 
-import styles from "./styles";
 import dataEntryStyles from "./../../styles/DataEntryPageStyles";
 
 class EditDivisionScreen extends Component {
