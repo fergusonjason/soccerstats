@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, StyleSheet, TouchableOpacity, Text} from "react-native";
+import {View, StyleSheet, TouchableOpacity, TouchableNativeFeedback, TouchableHighlight, Text, Platform} from "react-native";
 import {withNavigation} from "react-navigation";
 
 // TODO: Import only the functions I'm actually using
@@ -40,18 +40,39 @@ class MenuNavigationButton extends Component {
     }
 
 
+    _androidButton = () => {
+        return (
+            <TouchableNativeFeedback
+                onPress={() => this._clkOnPress()}
+                background={TouchableNativeFeedback.Ripple("#202646", true)}>
+                <View style={styles.buttonStyle}>
+                    <Text style={styles.textStyle}>{this.props.label}</Text>
+                </View>
+            </TouchableNativeFeedback>
+          
+        )
+    }
+
+    _iosButton = () => {
+        return (
+            <TouchableHighlight
+                onPress={() => this._clkOnPress()}>
+                <View style={styles.buttonStyle}>
+                    <Text style={styles.textStyle}>{this.props.label}</Text>
+                </View>
+            </TouchableHighlight>
+        );
+    }
 
     /**
      * Render component
      */
     render() {
-        return (
-            <TouchableOpacity
-                style={styles.buttonStyle}
-                onPress={this._clkOnPress}>
-                <Text style={styles.textStyle}>{this.props.label}</Text>
-            </TouchableOpacity>
-        );
+        if (Platform.OS === "android") {
+            return this._androidButton();
+        } else {
+            return this._iosButton();
+        }
     }
 }
 
