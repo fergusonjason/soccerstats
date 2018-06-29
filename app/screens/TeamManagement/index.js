@@ -14,14 +14,14 @@ class TeamManagementScreen extends Component {
         }
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
     }
 
-    componentWillUnmount() {
+    async componentWillUnmount() {
 
-        close(this.db);
+        await close(this.db);
     }
 
     _query = async () => {
