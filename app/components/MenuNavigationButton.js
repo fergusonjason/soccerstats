@@ -2,9 +2,6 @@ import React, {Component} from "react";
 import {View, StyleSheet, TouchableOpacity, TouchableNativeFeedback, TouchableHighlight, Text, Platform} from "react-native";
 import {withNavigation} from "react-navigation";
 
-// TODO: Import only the functions I'm actually using
-import _ from "lodash";
-
 /**
  * Reuseable component to render a button that will navigator to a new
  * screen
