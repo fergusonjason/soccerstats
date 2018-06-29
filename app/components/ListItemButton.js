@@ -22,16 +22,22 @@ class ListItemButton extends Component {
     }
 
     _iosButton = () => {
+        return (
             <TouchableHighlight
                 onPress={() => this.props.onPress()}>
                 <View style={listItemStyles.buttonStyle}>
                     <Text style={listItemStyles.buttonText}>{this.props.label}</Text>
                 </View>
             </TouchableHighlight>
+        );
     }
 
     _unsupported = () => {
-
+        return (
+            <View>
+                <Text>Unsupported</Text>
+            </View>
+        )
     }
 
     render() {
