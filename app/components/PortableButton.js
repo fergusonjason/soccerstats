@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, TouchableNativeFeedback, TouchableHighlight, Text, PlatForm} from "react-native";
+import {View, TouchableNativeFeedback, TouchableHighlight, Text, Platform, StyleSheet} from "react-native";
 import PropTypes from "prop-types";
 
 class PortableButton extends Component {
@@ -9,12 +9,13 @@ class PortableButton extends Component {
     }
 
     _iosButton = (label) => {
+        console.log("Entered _iosButton");
         return (
             <TouchableHighlight
-                onPress={() => this._onPress()}
-                onLongPress={() => this._onLongPress()}>
+                disabled={this.props.disabled}
+>
                 <View style={styles.buttonStyle}>
-                    <Text style={styles.textStyle}>{label}</Text>
+                    <Text style={styles.buttonText}>{label}</Text>
                 </View>
             </TouchableHighlight>
         );
@@ -22,23 +23,25 @@ class PortableButton extends Component {
     }
 
     _androidButton = (label) => {
-        <TouchableNativeFeedback
-            onPress={() => this._onPress()}
-            onLongPress={()=> this._onLongPress()}
-            background={TouchableNativeFeedback.Ripple("#202646", true)}>
-            <View style={styles.buttonStyle}>
-                <Text style={styles.textStyle}>{label}</Text>
-            </View>
-        </TouchableNativeFeedback>
+        return (
+            <TouchableNativeFeedback
+                disabled={false}
+                onPress={()=>this.props.onPress()}
+                background={TouchableNativeFeedback.Ripple("#202646", true)}>
+                <View style={styles.button}>
+                    <Text style={styles.buttonText}>{this.props.defaultLabel}</Text>
+                </View>
+            </TouchableNativeFeedback>
+        );
     }
 
     render() {
         switch (Platform.OS) {
             case "ios":
-                return this._iosButton;
+                return this._iosButton();
             case "android":
             default:
-                return this._androidButton;
+                return this._androidButton();
         }
 
     }
@@ -49,23 +52,27 @@ PortableButton.propTypes = {
     onLongPress: PropTypes.func,
     defaultLabel: PropTypes.string.isRequired,
     altLabel: PropTypes.string,
-    enabled: PropTypes.bool.isRequired
+    disable: PropTypes.bool.isRequired
 }
 
 const styles = StyleSheet.create({
-    textStyle: {
-        fontSize:20,
-        color: '#ffffff',
-        textAlign: 'center'
-      },
-      
-      buttonStyle: {
-        padding:10,
+    buttonStyle: {
+        alignItems: "flex-start",
+        justifyContent: "center",
         backgroundColor: '#202646',
-        borderRadius:5,
-        marginVertical: 20,
-        marginHorizontal: 20
-      }
+        width: 75,
+        height: 25,
+        padding: 10,
+        borderRadius: 5,
+        marginVertical: 10,
+        marginHorizontal: 10
+    },
+    buttonText: {
+        fontSize:14,
+        color: '#ffffff',
+        alignSelf: "center"
+       
+    }
 });
 
 export default PortableButton;
