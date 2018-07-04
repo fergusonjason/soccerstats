@@ -28,7 +28,7 @@ class PortableButton extends Component {
                 disabled={false}
                 onPress={()=>this.props.onPress()}
                 background={TouchableNativeFeedback.Ripple("#202646", true)}>
-                <View style={styles.button}>
+                <View style={styles.buttonStyle}>
                     <Text style={styles.buttonText}>{this.props.defaultLabel}</Text>
                 </View>
             </TouchableNativeFeedback>
