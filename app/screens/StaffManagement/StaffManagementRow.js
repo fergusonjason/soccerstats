@@ -57,7 +57,7 @@ class StaffManagementRow extends Component {
     render() {
         return (
             <View style={styles.component}>
-                <Text style={styles.text}>{this.state.staffMember.STAFF_NAME}</Text>
+                <Text style={styles.text}>{this.props.staffMember.STAFF_NAME}</Text>
                     <TouchableOpacity style={styles.button}
                         onPress={this._btnEdit}>
                         <Text style={styles.buttonText}>Edit</Text>
