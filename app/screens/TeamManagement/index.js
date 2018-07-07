@@ -1,13 +1,14 @@
 // /app/screens/TeamManagement/index.js
 
 import React, {Component} from "react";
-import {View, Text, FlatList, TouchableOpacity, StyleSheet} from "react-native";
+import {View, FlatList, Alert} from "react-native";
 
 import {open, close, query, execute} from "./../../util/DbUtils";
 
 import TeamManagementRow from "./TeamManagementRow";
+import PortableButton from "./../../components/PortableButton";
 
-import styles from "./styles";
+import styles, {bigButtonStyles} from "./styles";
 
 class TeamManagementScreen extends Component {
 
@@ -63,6 +64,15 @@ class TeamManagementScreen extends Component {
         this.props.navigation.navigate("Add Players", {teamId: teamId, refresh: () => this._query()});
     }
 
+    _btnAddTeam = () => {
+        Alert.alert("Not Implemented",
+            "Adding Teams not yet implemented",
+            [
+                {text: "Ok"}
+            ]);
+        //this.props.navigation.navigate("AddTeamScreen", {divisionId: this.state.divisionId});
+    }
+
     _renderItem = ({item}) => {
 
         return (
@@ -84,10 +94,15 @@ class TeamManagementScreen extends Component {
                         keyExtractor={(item) => item.TEAM_ID.toString()} />
                 </View>
                 <View style={styles.bottomButtonArea}>
-                    <TouchableOpacity style={styles.bottomButton}
+                    <PortableButton defaultLabel="Add Team" 
+                        onPress={()=>this._btnAddTeam()}
+                        style={bigButtonStyles}
+                        disabled={false}
+                    />
+                    {/* <TouchableOpacity style={styles.bottomButton}
                         onPress={() => {this._addDivision()}}>
                         <Text style={styles.bottomButtonText}>Add Team</Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
             </View>
         );
