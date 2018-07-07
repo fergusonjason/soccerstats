@@ -58,14 +58,14 @@ class StaffManagementRow extends Component {
         return (
             <View style={styles.component}>
                 <Text style={styles.text}>{this.props.staffMember.STAFF_NAME}</Text>
-                    <TouchableOpacity style={styles.button}
-                        onPress={this._btnEdit}>
-                        <Text style={styles.buttonText}>Edit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}
-                        onPress={this._btnDelete}>
-                        <Text style={styles.buttonText}>Delete</Text>
-                    </TouchableOpacity>                    
+                <TouchableOpacity style={styles.button}
+                    onPress={this._btnEdit}>
+                    <Text style={styles.buttonText}>Edit</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button}
+                    onPress={this._btnDelete}>
+                    <Text style={styles.buttonText}>Delete</Text>
+                </TouchableOpacity>                    
 
             </View>
         );
