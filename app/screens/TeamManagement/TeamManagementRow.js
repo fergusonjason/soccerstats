@@ -1,7 +1,9 @@
 import React, {Component} from "react";
-import {View, TouchableOpacity, Text} from "react-native";
+import {View, Text, StyleSheet} from "react-native";
 import {withNavigation} from "react-navigation";
 import PropTypes from "prop-types";
+
+import PortableButton from "./../../components/PortableButton";
 
 import listItemStyles from "./../../styles/ListItemStyles";
 
@@ -14,28 +16,49 @@ class TeamManagementRow extends Component {
         }
     }
 
+    _btnPressPlayers = () => {
+        this.props.onPlayers();
+    }
+
+    _btnLongPressPlayers = () => {
+
+    }
     render() {
         return(
-            <View styles={listItemStyles.component}>
-                <Text styles={listItemStyles.text}>{this.props.teamName}</Text>
-                <View>
-                    <TouchableOpacity style={listItemStyles.button}
-                        onPress={() => {this.props.onPlayers()}}>
-                        <Text style={listItemStyles.buttonText}>Players</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={listItemStyles.button}
-                        onPress={() => {this.props.onEdit()}}>
-                        <Text style={listItemStyles.buttonText}>Edit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={listItemStyles.button}
-                        onPress={() => {this.props.onDelete()}}>
-                        <Text style={listItemStyles.buttonText}>Delete</Text>
-                    </TouchableOpacity>
+            <View style={styles.rowComponent}>
+                <View style={styles.rowTextSection}>
+                    <Text>{this.props.teamName}</Text>
+                </View>
+                <View style={styles.rowButtonSection}>
+                    <PortableButton defaultLabel="Players"
+                        disabled={false}
+                        onPress={() => {this._btnPressPlayers()}}
+                        />
+                    <PortableButton defaultLabel="Edit"
+                        disabled={false}
+                        onPress={() => {}} 
+                        />
+                    <PortableButton defaultLabel="Delete"
+                        disabled={false}
+                        onPress={() => {}}
+                        />
                 </View>
             </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    rowComponent: {
+        flexDirection: "row"
+    },
+    rowTextSection: {
+        width: 100
+    },
+    rowButtonSection: {
+        flexDirection: "row"
+    }
+});
 
 TeamManagementRow.propTypes = {
     onPlayers: PropTypes.func,
