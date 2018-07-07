@@ -1,5 +1,5 @@
 import React,{Component} from "react";
-import {View, Text, FlatList, TouchableOpacity} from "react-native";
+import {View, Alert, FlatList} from "react-native";
 import SQLite from "react-native-sqlite-storage";
 import {withNavigation} from "react-navigation";
 
@@ -29,21 +29,27 @@ class StaffManagementScreen extends Component {
         this.props.navigation.navigate("EditStaffMemberScreen", {id: item.STAFF_ID, refresh: this._query()});
     }
 
+    _delete = async (item) => {
+        const sql = "DELETE FROM STAFF WHERE STAFF_ID = ?";
+
+        await execute(this.db, sql, [item.STAFF_ID]);
+        this._query();
+    }
+
     _btnDelete = async (item) => {
+
 
         console.log("Entered _delete");
 
-        const sql = "DELETE FROM STAFF WHERE STAFF_ID = ?";
+        Alert.alert("Are you sure?",
+            "You will not be able to undo this operation. Are you sure?",
+            [
+                {text: "Ok", onPress: () => {
+                    this._delete(item);
+                }},
+                {text: "Cancel"}
+            ]);
 
-        let result = await execute(this.db, sql, [item.STAFF_ID]);
-
-        if (result.rowsAffected == 0) {
-            Alert.alert("Database Error",
-                "No deletions made",
-                [{text: "Ok"}]);
-        }
-
-        this._query();
     }
 
     _btnAddStaff = () => {
