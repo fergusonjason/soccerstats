@@ -6,7 +6,8 @@ const dataEntryStyles = StyleSheet.create({
     },
     textSection: {
         flexDirection: "row",
-        alignItems: "flex-start"
+        alignItems: "flex-start",
+        alignSelf: "center"
     },
     textSectionText: {
         color: "black"

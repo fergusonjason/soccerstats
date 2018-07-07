@@ -8,6 +8,7 @@ import {open, close, query, execute} from "./../../util/DbUtils";
 import TeamManagementRow from "./TeamManagementRow";
 import PortableButton from "./../../components/PortableButton";
 
+import masterStyles, {listPage} from "./../../styles/master";
 import styles, {bigButtonStyles} from "./styles";
 
 class TeamManagementScreen extends Component {
@@ -86,23 +87,19 @@ class TeamManagementScreen extends Component {
 
     render() {
         return (
-            <View style={styles.component} >
-                <View styles={styles.listArea}>
+            <View style={masterStyles.component} >
+                <View styles={listPage.listArea}>
                     <FlatList
                         data={this.state.teams}
                         renderItem={this._renderItem}
                         keyExtractor={(item) => item.TEAM_ID.toString()} />
                 </View>
-                <View style={styles.bottomButtonArea}>
+                <View style={listPage.bottomButtonArea}>
                     <PortableButton defaultLabel="Add Team" 
                         onPress={()=>this._btnAddTeam()}
                         style={bigButtonStyles}
                         disabled={false}
                     />
-                    {/* <TouchableOpacity style={styles.bottomButton}
-                        onPress={() => {this._addDivision()}}>
-                        <Text style={styles.bottomButtonText}>Add Team</Text>
-                    </TouchableOpacity> */}
                 </View>
             </View>
         );

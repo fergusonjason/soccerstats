@@ -5,6 +5,8 @@ import PropTypes from "prop-types";
 
 import {open, execute} from "./../../util/DbUtils";
 
+import {rowStyles} from "./../../styles/master";
+
 class StaffManagementRow extends Component {
 
     constructor(props) {
@@ -56,17 +58,20 @@ class StaffManagementRow extends Component {
 
     render() {
         return (
-            <View style={styles.component}>
-                <Text style={styles.text}>{this.props.staffMember.STAFF_NAME}</Text>
-                <TouchableOpacity style={styles.button}
-                    onPress={this._btnEdit}>
-                    <Text style={styles.buttonText}>Edit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.button}
-                    onPress={this._btnDelete}>
-                    <Text style={styles.buttonText}>Delete</Text>
-                </TouchableOpacity>                    
-
+            <View style={rowStyles.rowComponent}>
+                <View style={rowStyles.rowTextSection}>
+                    <Text style={styles.text}>{this.props.staffMember.STAFF_NAME}</Text>
+                </View>
+                <View style={rowStyles.rowButtonSection}>
+                    <TouchableOpacity style={styles.button}
+                        onPress={this._btnEdit}>
+                        <Text style={styles.buttonText}>Edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}
+                        onPress={this._btnDelete}>
+                        <Text style={styles.buttonText}>Delete</Text>
+                    </TouchableOpacity>                    
+                </View>
             </View>
         );
     }
@@ -77,22 +82,14 @@ StaffManagementRow.propTypes = {
 }
 
 const styles = StyleSheet.create({
-    component: {
-        flex: 1,
-        flexDirection: "row",
-        padding: 10,
-        height: 50
-        
-    },
     text: {
         flex: 1,
         padding: 10,
         alignItems: "center",
         fontWeight: "bold",
-        height: 50,
-        width: 100},
+        height: 50},
     button: {
-        alignItems: "flex-start",
+        alignItems: "center",
         justifyContent: "center",
         backgroundColor: '#202646',
         width: 75,

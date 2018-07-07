@@ -4,6 +4,7 @@ import {withNavigation} from "react-navigation";
 
 import {open, query, close, execute} from "./../../util/DbUtils";
 
+import masterStyles, {dataEntryPage} from "./../../styles/master";
 import styles from "./styles";
 
 class AddStaffMemberScreen extends Component {
@@ -76,8 +77,8 @@ class AddStaffMemberScreen extends Component {
 
     render() {
         return (
-            <View style={styles.component}>
-                <View style={styles.inputArea}>
+            <View style={masterStyles.component}>
+                <View style={dataEntryPage.inputArea}>
                     <Text>Name:</Text>
                     <TextInput 
                         onChangeText={(text)=>{ this.setState({STAFF_NAME: text}) }}
@@ -87,10 +88,10 @@ class AddStaffMemberScreen extends Component {
                          onChangeText={(text) => { this.setState({STAFF_EMAIL: text}) }}
                          value={this.state.STAFF_EMAIL} />
                 </View>
-                <View style={styles.bottomButtonArea}>
+                <View style={dataEntryPage.bottomButtonArea}>
                     <TouchableOpacity style={styles.bottomButton}
                         onPress={this._btnUpdate}>
-                        <Text style={styles.bottomButtonText}>Update Staff Member</Text>
+                        <Text style={dataEntryPage.bottomButtonText}>Update Staff Member</Text>
                     </TouchableOpacity>
                 </View>
             </View>

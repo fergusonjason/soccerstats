@@ -4,11 +4,9 @@ import {withNavigation} from "react-navigation";
 
 import {open,query,close} from "./../../util/DbUtils";
 
-import styles from "./styles";
-import dataEntryStyles from "./../../styles/DataEntryPageStyles";
+import masterStyles, {listPage} from "./../../styles/master";
 
 import DivisionManagementRow from "./DivisionManagementRow";
-import MenuNavigationButton from "./../../components/MenuNavigationButton";
 
 class DivisionManagmementScreen extends Component {
 
@@ -56,10 +54,6 @@ class DivisionManagmementScreen extends Component {
         console.log("Entered _addTeam()");
         
         this.props.navigation.navigate("TeamManagementScreen",{divisionId: divisionId})
-        // Alert.alert("Not implemented",
-        // "Not implemented yet",
-        // [{text: "Ok"}]);
-
 
     }
 
@@ -120,21 +114,19 @@ class DivisionManagmementScreen extends Component {
 
     render() {
         return (
-            <View style={styles.component}>
-                <View style={styles.listArea}>
+            <View style={masterStyles.component}>
+                <View style={listPage.listArea}>
                     <FlatList 
                         data={this.state.divisions}
                         renderItem={this._renderItem}
                         keyExtractor={(item) => item.DIVISION_ID.toString() }
                         extraData={this.state.toggle}/>
                 </View>
-                <View style={styles.bottomButtonArea}>
-                    <View style={styles.bottomButtonSection}>
-                        <TouchableOpacity style={styles.button}
-                            onPress={() => {this._addDivision()}}>
-                            <Text style={styles.buttonText}>Add Division</Text>
-                        </TouchableOpacity>
-                    </View>
+                <View style={listPage.bottomButtonArea}>
+                    <TouchableOpacity style={listPage.bottomButton}
+                        onPress={() => {this._addDivision()}}>
+                        <Text style={listPage.bottomButtonText}>Add Division</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );

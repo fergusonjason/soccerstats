@@ -1,10 +1,11 @@
+// /app/screens/EditStaffMemberScreen/index.js
 import React, {Component} from "react";
 import {View, Text, TextInput, TouchableOpacity, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 
 import {open, query, close, execute} from "./../../util/DbUtils";
 
-import styles from "./styles";
+import masterStyles, {dataEntryPage} from "./../../styles/master";
 
 class EditStaffMemberScreen extends Component {
 
@@ -78,8 +79,8 @@ class EditStaffMemberScreen extends Component {
 
     render() {
         return (
-            <View style={styles.component}>
-                <View style={styles.inputArea}>
+            <View style={masterStyles.component}>
+                <View style={dataEntryPage.inputArea}>
                     <Text>Name:</Text>
                     <TextInput 
                         onChangeText={(text)=>{ this.setState({STAFF_NAME: text}) }}
@@ -89,10 +90,10 @@ class EditStaffMemberScreen extends Component {
                          onChangeText={(text) => { this.setState({STAFF_EMAIL: text}) }}
                          value={this.state.STAFF_EMAIL} />
                 </View>
-                <View style={styles.bottomButtonArea}>
-                    <TouchableOpacity style={styles.bottomButton}
+                <View style={dataEntryPage.bottomButtonArea}>
+                    <TouchableOpacity style={dataEntryPage.bottomButton}
                         onPress={this._btnUpdate}>
-                        <Text style={styles.bottomButtonText}>Update Staff Member</Text>
+                        <Text style={dataEntryPage.bottomButtonText}>Update Staff Member</Text>
                     </TouchableOpacity>
                 </View>
             </View>

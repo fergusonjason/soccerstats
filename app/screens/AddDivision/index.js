@@ -5,6 +5,7 @@ import {withNavigation} from "react-navigation";
 import {open, execute, close} from "./../../util/DbUtils";
 
 import styles from "./styles";
+import masterStyles, {dataEntryPage} from "./../../styles/master";
 
 class AddDivisionScreen extends Component {
 
@@ -45,15 +46,15 @@ class AddDivisionScreen extends Component {
 
     render() {
         return (
-            <View style={styles.component}>
-                <View style={styles.inputArea} >
+            <View style={masterStyles.component}>
+                <View style={dataEntryPage.inputArea} >
                     <Text>Division Name: </Text>
                     <TextInput onChangeText={(text) => this.setState({"DIVISION_NAME": text})} />
                 </View>
-                <View style={styles.bottomButtonArea}>
+                <View style={dataEntryPage.bottomButtonArea}>
                     <TouchableOpacity style={styles.bottomButton}
                         onPress={this._btnAdd}>
-                        <Text style={styles.bottomButtonText}>Add Division</Text>
+                        <Text style={dataEntryPage.bottomButtonText}>Add Division</Text>
                     </TouchableOpacity>
                 </View>
             </View>

@@ -4,7 +4,7 @@ import {View, Text} from "react-native";
 import {withNavigation} from "react-navigation";
 import PropTypes from "prop-types";
 
-import dataEntryStyles from "./../../styles/DataEntryPageStyles";
+import {rowStyles} from "./../../styles/master";
 
 import PortableButton from "./../../components/PortableButton";
 import {portableButtonStyles} from "./styles";
@@ -18,21 +18,21 @@ class DivisionManagementRow extends Component {
     render() {
 
         return (
-            <View style={dataEntryStyles.component}>
-                <Text>{this.props.divisionName}</Text>
-                <View style={dataEntryStyles.buttonSection}>
-                <PortableButton defaultLabel="Teams"
-                    onPress={() => {this.props.onAddTeam()}}
-                    style={portableButtonStyles}
-                    disabled={false} />
-                <PortableButton defaultLabel="Edit"
-                    onPress={() => {this.props.onEdit()}}
-                    style={portableButtonStyles}
-                    disabled={false} />
-                  <PortableButton defaultLabel="Delete"
-                    onPress={() => {this.props.onDelete()}}
-                    style={portableButtonStyles}
-                    disabled={false} />
+            <View style={rowStyles.rowComponent}>
+                <Text style={rowStyles.rowTextSection}>{this.props.divisionName}</Text>
+                <View style={rowStyles.rowButtonSection}>
+                    <PortableButton defaultLabel="Teams"
+                        onPress={() => {this.props.onAddTeam()}}
+                        style={portableButtonStyles}
+                        disabled={false} />
+                    <PortableButton defaultLabel="Edit"
+                        onPress={() => {this.props.onEdit()}}
+                        style={portableButtonStyles}
+                        disabled={false} />
+                    <PortableButton defaultLabel="Delete"
+                        onPress={() => {this.props.onDelete()}}
+                        style={portableButtonStyles}
+                        disabled={false} />
                 </View>
             </View>
         );

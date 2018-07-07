@@ -1,10 +1,11 @@
+// /apps/screens/EditDivision/index.js
 import React, {Component} from "react";
 import {View, Text, TextInput, Alert, TouchableOpacity} from "react-native";
 import {withNavigation} from "react-navigation";
 
 import {open,query, execute, close} from "./../../util/DbUtils";
 
-import dataEntryStyles from "./../../styles/DataEntryPageStyles";
+import masterStyles, {dataEntryPage} from "./../../styles/master";
 
 class EditDivisionScreen extends Component {
 
@@ -55,16 +56,16 @@ class EditDivisionScreen extends Component {
 
     render() {
         return (
-            <View style={dataEntryStyles.component}>
-                <View style={dataEntryStyles.textSection}>
-                    <Text style={dataEntryStyles.textSectionText}>Division Name</Text>
+            <View style={masterStyles.component}>
+                <View style={dataEntryPage.inputSection}>
+                    <Text>Division Name</Text>
                     <TextInput value={this.state.DIVISION_NAME} 
                         onChangeText={(text) => this.setState({DIVISION_NAME: text})}/>
                 </View>
-                <View style={dataEntryStyles.buttonSection}>
-                    <TouchableOpacity style={dataEntryStyles.button}
+                <View style={dataEntryPage.bottomButtonArea}>
+                    <TouchableOpacity style={dataEntryPage.bottomButton}
                             onPress={() => {this_btnUpdate()}}>
-                            <Text style={dataEntryStyles.buttonText}>Update Division</Text>
+                            <Text style={dataEntryPage.bottomButtonText}>Update Division</Text>
                         </TouchableOpacity>
                 </View>
             </View>

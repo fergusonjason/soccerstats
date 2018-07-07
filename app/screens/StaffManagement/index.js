@@ -3,12 +3,13 @@ import {View, Text, FlatList, TouchableOpacity} from "react-native";
 import SQLite from "react-native-sqlite-storage";
 import {withNavigation} from "react-navigation";
 
-//import StaffEntry from "./../../components/StaffEntry";
+
 import StaffManagementRow from "./StaffManagementRow";
 
 import {open, query, close} from "./../../util/DbUtils";
 
-import styles from "./styles";
+import masterStyles, {listPage} from "./../../styles/master";
+
 
 SQLite.enablePromise(true);
 
@@ -46,16 +47,16 @@ class StaffManagementScreen extends Component {
 
     render() {
         return (
-            <View style={styles.component}>
-                <View style={styles.listArea}>
+            <View style={masterStyles.component}>
+                <View style={listPage.listArea}>
                     <FlatList data={this.state.staff}
                         renderItem={({item}) => <StaffManagementRow staffMember={item} />} 
                         keyExtractor={(item) => item.STAFF_ID.toString() }/>
                 </View>
-                <View style={styles.bottomButtonArea}>
-                    <TouchableOpacity style={styles.bottomButton}
+                <View style={listPage.bottomButtonArea}>
+                    <TouchableOpacity style={listPage.bottomButton}
                         onPress={this._btnAddStaff}>
-                        <Text style={styles.bottomButtonText}>Add Staff Member</Text>
+                        <Text style={listPage.bottomButtonText}>Add Staff Member</Text>
                     </TouchableOpacity>
                 </View>
             </View>

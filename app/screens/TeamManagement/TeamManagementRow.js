@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import PortableButton from "./../../components/PortableButton";
 
-import {portableButtonStyles} from "./styles";
+import {rowStyles, portableButtonStyles} from "./../../styles/master";
 
 class TeamManagementRow extends Component {
 
@@ -25,11 +25,11 @@ class TeamManagementRow extends Component {
     }
     render() {
         return(
-            <View style={styles.rowComponent}>
-                <View style={styles.rowTextSection}>
+            <View style={rowStyles.rowComponent}>
+                <View style={rowStyles.rowTextSection}>
                     <Text>{this.props.teamName}</Text>
                 </View>
-                <View style={styles.rowButtonSection}>
+                <View style={rowStyles.rowButtonSection}>
                     <PortableButton defaultLabel="Players"
                         disabled={false}
                         onPress={() => {this._btnPressPlayers()}}
@@ -50,20 +50,6 @@ class TeamManagementRow extends Component {
         );
     }
 }
-
-const styles = StyleSheet.create({
-    rowComponent: {
-        flexDirection: "row"
-    },
-    rowTextSection: {
-        width: 100,
-        alignSelf: "center",
-        margin: 10
-    },
-    rowButtonSection: {
-        flexDirection: "row"
-    }
-});
 
 TeamManagementRow.propTypes = {
     onPlayers: PropTypes.func,

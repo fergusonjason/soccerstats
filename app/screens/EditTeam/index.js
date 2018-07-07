@@ -1,3 +1,4 @@
+// /apps/screens/EditTeam/EditTeam.js
 import React, {Component} from "react";
 import {View,Text, TextInput, Alert, TouchableHighlight} from "react-native";
 import {withNavigation} from "react-navigation";
@@ -5,8 +6,8 @@ import PropTypes from "prop-types";
 
 import {open, execute, close} from "./../../util/DbUtils";
 
-import dataEntryPageStyles from "./../../styles/DataEntryPageStyles";
-import dataEntryStyles from "./../../styles/DataEntryPageStyles";
+import masterStyles, {dataEntryPage} from "./../../styles/master";
+
 
 class EditTeam extends Component {
 
@@ -41,20 +42,19 @@ class EditTeam extends Component {
 
     render() {
         return (
-            <View style={dataEntryPageStyles.component}>
-                <View style={dataEntryPageStyles.textSection}>
-                    <Text style={dataEntryPageStyles.textSectionText}>Team Name</Text>
+            <View style={masterStyles.component}>
+                <View style={dataEntryPage.inputArea}>
+                    <Text>Team Name</Text>
                     <TextInput value={this.state.TEAM_NAME}
                         onChangeText={(text) => {this.setState(TEAM_NAME, text)}} />
                 </View>
-                <View style={dataEntryPageStyles.buttonSection}>
+                <View style={dataEntryPage.bottomButtonSection}>
                     <TouchableHighlight>
-                        <View style={dataEntryStyles.button}>
-                            <Text style={dataEntryStyles.buttonText}>Edit Team</Text>
+                        <View style={dataEntryPage.bottomButton}>
+                            <Text style={dataEntryPage.bottomButtonText}>Edit Team</Text>
                         </View>
                     </TouchableHighlight>
                 </View>
-
             </View>
         )
     }
