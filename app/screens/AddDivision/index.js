@@ -55,7 +55,7 @@ class AddDivisionScreen extends Component {
                 </View>
                 <View style={dataEntryPage.bottomButtonArea}>
                     <PortableButton defaultLabel="Add Division"
-                        onPress={this._btnAdd()}
+                        onPress={() => this._btnAdd()}
                         onLongPress={()=>{}}
                         style={bigButtonStyles} />
                 </View>
