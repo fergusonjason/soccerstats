@@ -1,7 +1,13 @@
+// /app/screens/TeamManagement/index.js
+
 import React, {Component} from "react";
-import {View, Text} from "react-native";
+import {View, Text, FlatList, TouchableOpacity, StyleSheet} from "react-native";
 
 import {open, close, query, execute} from "./../../util/DbUtils";
+
+import TeamManagementRow from "./TeamManagementRow";
+
+import styles from "./styles";
 
 class TeamManagementScreen extends Component {
 
@@ -16,7 +22,10 @@ class TeamManagementScreen extends Component {
 
     async componentDidMount() {
 
+        console.log("Entered componentDidMount()");
+
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
+        this._query();
     }
 
     async componentWillUnmount() {
@@ -26,7 +35,8 @@ class TeamManagementScreen extends Component {
 
     _query = async () => {
 
-        const sql = "SELECT * FROM TEAM WHERE DIVISION_ID = ?";
+        console.log("Entered _query");
+        const sql = "SELECT * FROM TEAM WHERE TEAM_DIVISION_ID = ?";
         let result = await query(this.db, sql, [this.state.divisionId]);
 
         this.setState({teams: result.result});
@@ -44,10 +54,41 @@ class TeamManagementScreen extends Component {
         let result = await execute(this.db, sql, [teamId]);
     }
 
+    _btnEditTeam = (teamId) => {
+
+        this.props.navigation.navigate("EditTeamPage",{teamId: teamId, refresh: () => this._query()});
+    }
+
+    _btnAddPlayers = (teamId) => {
+        this.props.navigation.navigate("Add Players", {teamId: teamId, refresh: () => this._query()});
+    }
+
+    _renderItem = ({item}) => {
+
+        return (
+            <TeamManagementRow
+                teamName={item.TEAM_NAME}
+                onPlayers={() => {this._btnAddPlayers()}}
+                onEdit={() =>{this._btnEditTeam()}}
+                onDelete={()=>{this._btnDeleteTeam()}} />
+        );
+    }
+
     render() {
         return (
-            <View>
-                <Text>Not Implemented Yet</Text>
+            <View style={styles.component} >
+                <View styles={styles.listArea}>
+                    <FlatList
+                        data={this.state.teams}
+                        renderItem={this._renderItem}
+                        keyExtractor={(item) => item.TEAM_ID.toString()} />
+                </View>
+                <View style={styles.bottomButtonArea}>
+                    <TouchableOpacity style={styles.bottomButton}
+                        onPress={() => {this._addDivision()}}>
+                        <Text style={styles.bottomButtonText}>Add Team</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
