@@ -20,7 +20,7 @@ class StaffManagementRow extends Component {
         return (
             <View style={rowStyles.rowComponent}>
                 <View style={rowStyles.rowTextSection}>
-                    <Text style={styles.text}>{this.props.staffMember.STAFF_NAME}</Text>
+                    <Text>{this.props.staffMember.STAFF_NAME}</Text>
                 </View>
                 <View style={rowStyles.rowButtonSection}>
                     <PortableButton defaultLabel="Edit"
