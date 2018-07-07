@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 import PortableButton from "./../../components/PortableButton";
 
-import listItemStyles from "./../../styles/ListItemStyles";
+import {portableButtonStyles} from "./styles";
 
 class TeamManagementRow extends Component {
 
@@ -33,14 +33,17 @@ class TeamManagementRow extends Component {
                     <PortableButton defaultLabel="Players"
                         disabled={false}
                         onPress={() => {this._btnPressPlayers()}}
+                        style={portableButtonStyles}
                         />
                     <PortableButton defaultLabel="Edit"
                         disabled={false}
                         onPress={() => {}} 
+                        style={portableButtonStyles}
                         />
                     <PortableButton defaultLabel="Delete"
                         disabled={false}
                         onPress={() => {}}
+                        style={portableButtonStyles}
                         />
                 </View>
             </View>
