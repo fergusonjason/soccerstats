@@ -4,7 +4,8 @@ import {withNavigation} from "react-navigation";
 
 import {open, query, close, execute} from "./../../util/DbUtils";
 
-import masterStyles, {dataEntryPage} from "./../../styles/master";
+import PortableButton from "./../../components/PortableButton";
+import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
 import styles from "./styles";
 
 class AddStaffMemberScreen extends Component {
@@ -89,10 +90,10 @@ class AddStaffMemberScreen extends Component {
                          value={this.state.STAFF_EMAIL} />
                 </View>
                 <View style={dataEntryPage.bottomButtonArea}>
-                    <TouchableOpacity style={styles.bottomButton}
-                        onPress={this._btnUpdate}>
-                        <Text style={dataEntryPage.bottomButtonText}>Update Staff Member</Text>
-                    </TouchableOpacity>
+                    <PortableButton defaultLabel="Add Staff Member"
+                        onPress={()=>this._btnUpdate()}
+                        onLongPress={()=>{}}
+                        style={bigButtonStyles} />
                 </View>
             </View>
         );

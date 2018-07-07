@@ -4,7 +4,9 @@ import {withNavigation} from "react-navigation";
 
 import {open,query,close} from "./../../util/DbUtils";
 
-import masterStyles, {listPage} from "./../../styles/master";
+import PortableButton from "./../../components/PortableButton";
+
+import masterStyles, {listPage, bigButtonStyles} from "./../../styles/master";
 
 import DivisionManagementRow from "./DivisionManagementRow";
 
@@ -123,10 +125,10 @@ class DivisionManagmementScreen extends Component {
                         extraData={this.state.toggle}/>
                 </View>
                 <View style={listPage.bottomButtonArea}>
-                    <TouchableOpacity style={listPage.bottomButton}
-                        onPress={() => {this._addDivision()}}>
-                        <Text style={listPage.bottomButtonText}>Add Division</Text>
-                    </TouchableOpacity>
+                    <PortableButton defaultLabel="Add Division"
+                        onPress={() => {this._addDivision()}}
+                        onLongPress={() => {}}
+                        style={bigButtonStyles} />
                 </View>
             </View>
         );

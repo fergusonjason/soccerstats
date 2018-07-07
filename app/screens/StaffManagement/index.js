@@ -8,7 +8,8 @@ import StaffManagementRow from "./StaffManagementRow";
 
 import {open, query, close} from "./../../util/DbUtils";
 
-import masterStyles, {listPage} from "./../../styles/master";
+import PortableButton from "./../../components/PortableButton";
+import masterStyles, {listPage, bigButtonStyles} from "./../../styles/master";
 
 
 SQLite.enablePromise(true);
@@ -54,10 +55,11 @@ class StaffManagementScreen extends Component {
                         keyExtractor={(item) => item.STAFF_ID.toString() }/>
                 </View>
                 <View style={listPage.bottomButtonArea}>
-                    <TouchableOpacity style={listPage.bottomButton}
-                        onPress={this._btnAddStaff}>
-                        <Text style={listPage.bottomButtonText}>Add Staff Member</Text>
-                    </TouchableOpacity>
+                    <PortableButton defaultLabel="Add Staff Member"
+                        onPress={()=>{this._btnAddStaff()}}
+                        onLongPress={()=>{}}
+                        style={bigButtonStyles}
+                        disabled={false} />
                 </View>
             </View>
         );

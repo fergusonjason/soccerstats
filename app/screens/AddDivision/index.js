@@ -4,8 +4,10 @@ import {withNavigation} from "react-navigation";
 
 import {open, execute, close} from "./../../util/DbUtils";
 
+import PortableButton from "./../../components/PortableButton";
+
 import styles from "./styles";
-import masterStyles, {dataEntryPage} from "./../../styles/master";
+import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
 
 class AddDivisionScreen extends Component {
 
@@ -52,10 +54,10 @@ class AddDivisionScreen extends Component {
                     <TextInput onChangeText={(text) => this.setState({"DIVISION_NAME": text})} />
                 </View>
                 <View style={dataEntryPage.bottomButtonArea}>
-                    <TouchableOpacity style={styles.bottomButton}
-                        onPress={this._btnAdd}>
-                        <Text style={dataEntryPage.bottomButtonText}>Add Division</Text>
-                    </TouchableOpacity>
+                    <PortableButton defaultLabel="Add Division"
+                        onPress={this._btnAdd()}
+                        onLongPress={()=>{}}
+                        style={bigButtonStyles} />
                 </View>
             </View>
         );

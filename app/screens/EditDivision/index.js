@@ -5,7 +5,9 @@ import {withNavigation} from "react-navigation";
 
 import {open,query, execute, close} from "./../../util/DbUtils";
 
-import masterStyles, {dataEntryPage} from "./../../styles/master";
+import PortableButton from "./../../components/PortableButton";
+
+import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
 
 class EditDivisionScreen extends Component {
 
@@ -63,10 +65,10 @@ class EditDivisionScreen extends Component {
                         onChangeText={(text) => this.setState({DIVISION_NAME: text})}/>
                 </View>
                 <View style={dataEntryPage.bottomButtonArea}>
-                    <TouchableOpacity style={dataEntryPage.bottomButton}
-                            onPress={() => {this_btnUpdate()}}>
-                            <Text style={dataEntryPage.bottomButtonText}>Update Division</Text>
-                        </TouchableOpacity>
+                    <PortableButton defaultLabel="Update Division"
+                        onPress={() => {this_btnUpdate()}}
+                        onLongPress={()=>{}}
+                        style={bigButtonStyles} />
                 </View>
             </View>
         );

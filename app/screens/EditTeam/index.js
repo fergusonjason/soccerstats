@@ -6,7 +6,8 @@ import PropTypes from "prop-types";
 
 import {open, execute, close} from "./../../util/DbUtils";
 
-import masterStyles, {dataEntryPage} from "./../../styles/master";
+import PortableButton from "./../../components/PortableButton";
+import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
 
 
 class EditTeam extends Component {
@@ -49,11 +50,11 @@ class EditTeam extends Component {
                         onChangeText={(text) => {this.setState(TEAM_NAME, text)}} />
                 </View>
                 <View style={dataEntryPage.bottomButtonSection}>
-                    <TouchableHighlight>
-                        <View style={dataEntryPage.bottomButton}>
-                            <Text style={dataEntryPage.bottomButtonText}>Edit Team</Text>
-                        </View>
-                    </TouchableHighlight>
+                    <PortableButton defaultLabel="Edit Team"
+                        onPress={()=> {this._btnPress()}}
+                        onLongPress={()=>{}}
+                        style={bigButtonStyles}
+                        disabled={false} />
                 </View>
             </View>
         )
