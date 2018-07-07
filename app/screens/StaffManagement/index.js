@@ -25,8 +25,46 @@ class StaffManagementScreen extends Component {
        
     }
 
+    _btnEdit = (item) => {
+        this.props.navigation.navigate("EditStaffMemberScreen", {id: item.STAFF_ID, refresh: this._query()});
+    }
+
+    _btnDelete = async (item) => {
+
+        console.log("Entered _delete");
+
+        const sql = "DELETE FROM STAFF WHERE STAFF_ID = ?";
+
+        let result = await execute(this.db, sql, [item.STAFF_ID]);
+
+        if (result.rowsAffected == 0) {
+            Alert.alert("Database Error",
+                "No deletions made",
+                [{text: "Ok"}]);
+        }
+
+        this._query();
+    }
+
     _btnAddStaff = () => {
-        this.props.navigation.navigate("AddStaffMemberScreen");
+        this.props.navigation.navigate("AddStaffMemberScreen", {refresh: () => {this._query()}});
+    }
+
+    _query = async () => {
+
+        const sql = "SELECT * FROM STAFF";
+        let result = await query(this.db, sql, []);
+
+        this.setState({staff: result.result});
+    }
+
+    _renderItem = ({item}) => {
+        return (
+            <StaffManagementRow staffMember={item}
+                onEdit = {()=>{this._btnEdit(item)}} 
+                onDelete = {()=>{this._btnDelete(item)}} />
+        );
+
     }
 
     async componentDidMount() {
@@ -34,10 +72,8 @@ class StaffManagementScreen extends Component {
         const sql = "SELECT * FROM STAFF";
 
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-        let result = await query(this.db, sql, []);
-        console.log("Result: " + JSON.stringify(result.result));
+        this._query();
 
-        this.setState({staff: result.result});
     }
 
     componentWillUnmount() {
@@ -51,7 +87,7 @@ class StaffManagementScreen extends Component {
             <View style={masterStyles.component}>
                 <View style={listPage.listArea}>
                     <FlatList data={this.state.staff}
-                        renderItem={({item}) => <StaffManagementRow staffMember={item} />} 
+                        renderItem={this._renderItem} 
                         keyExtractor={(item) => item.STAFF_ID.toString() }/>
                 </View>
                 <View style={listPage.bottomButtonArea}>

@@ -3,9 +3,9 @@ import {View, Text, StyleSheet, TouchableOpacity, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 import PropTypes from "prop-types";
 
-import {open, execute} from "./../../util/DbUtils";
+import PortableButton from "./../../components/PortableButton";
 
-import {rowStyles} from "./../../styles/master";
+import {rowStyles, portableButtonStyles} from "./../../styles/master";
 
 class StaffManagementRow extends Component {
 
@@ -16,46 +16,6 @@ class StaffManagementRow extends Component {
         };
     }
 
-    _btnEdit = () => {
-
-        this.props.navigation.navigate("EditStaffMemberScreen", {id: this.state.item.STAFF_ID});
-    }
-
-    _btnDelete = () => {
-        Alert.alert("Confirm",
-            "Are you sure? You will not be able to undo this",
-            [
-                {text: "Cancel"},
-                {text: "Ok", onPress: () => {this._delete}}
-            ]);
-
-    }
-
-    _delete = async () => {
-
-        console.log("Entered _delete");
-
-        const sql = "DELETE FROM STAFF WHERE STAFF_ID = ?";
-
-        let result = await execute(this.db, sql, [this.state.item.STAFF_ID]);
-
-        if (result.rowsAffected == 0) {
-            Alert.alert("Database Error",
-                "No deletions made",
-                [{text: "Ok"}]);
-        }
-    }
-
-    async componentDidMount() {
-
-        this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-    }
-
-    componentWillUnmount() {
-
-        this.db.close();
-    }
-
     render() {
         return (
             <View style={rowStyles.rowComponent}>
@@ -63,14 +23,16 @@ class StaffManagementRow extends Component {
                     <Text style={styles.text}>{this.props.staffMember.STAFF_NAME}</Text>
                 </View>
                 <View style={rowStyles.rowButtonSection}>
-                    <TouchableOpacity style={styles.button}
-                        onPress={this._btnEdit}>
-                        <Text style={styles.buttonText}>Edit</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button}
-                        onPress={this._btnDelete}>
-                        <Text style={styles.buttonText}>Delete</Text>
-                    </TouchableOpacity>                    
+                    <PortableButton defaultLabel="Edit"
+                        onPress={()=>this.props.onEdit()}
+                        onLongPress={()=>{}}
+                        style={portableButtonStyles}
+                        disabled={false} />
+                    <PortableButton defaultLabel="Delete"
+                        onPress={()=>{this.props.onDelete()}}
+                        onLongPress={()=>{}}
+                        style={portableButtonStyles}
+                        disabled={false} />
                 </View>
             </View>
         );
@@ -78,7 +40,9 @@ class StaffManagementRow extends Component {
 }
 
 StaffManagementRow.propTypes = {
-    staffMember: PropTypes.object.isRequired
+    staffMember: PropTypes.object.isRequired,
+    onEdit: PropTypes.func.isRequired,
+    onDelete: PropTypes.func.isRequired
 }
 
 const styles = StyleSheet.create({
@@ -87,24 +51,7 @@ const styles = StyleSheet.create({
         padding: 10,
         alignItems: "center",
         fontWeight: "bold",
-        height: 50},
-    button: {
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: '#202646',
-        width: 75,
-        height: 25,
-        padding: 10,
-        borderRadius: 5,
-        marginVertical: 10,
-        marginHorizontal: 10
-    },
-    buttonText: {
-        fontSize:14,
-        color: '#ffffff',
-        alignSelf: "center"
-       
-    }
+        height: 50}
 });
 
 export default withNavigation(StaffManagementRow);

@@ -32,6 +32,7 @@ class AddStaffMemberScreen extends Component {
         console.log("Records updated: " + result.rowsAffected);
 
         if (result.rowsAffected > 0) {
+            this.props.navigation.state.params.refresh();
             // navigate back to Staff Management
             this.props.navigation.navigate("StaffManagementScreen");
         } else {
