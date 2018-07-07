@@ -55,7 +55,7 @@ class DivisionManagmementScreen extends Component {
 
         console.log("Entered _addTeam()");
         
-        this.props.navigation.navigate("TeamManagementScreen",{divisionId: divisionId})
+        this.props.navigation.navigate("TeamManagementScreen",{divisionId: divisionId});
 
     }
 
