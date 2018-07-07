@@ -29,9 +29,10 @@ class DivisionManagmementScreen extends Component {
         console.log("Entered componentDidMount()");
 
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-        let result = await this._queryDivisions(); // initially populate the divisions
-        this.setState({divisions: result.result});
-        console.log("State after componentDidMount(): " + JSON.stringify(this.state));
+        this._query();
+        // let result = await this._queryDivisions(); // initially populate the divisions
+        // this.setState({divisions: result.result});
+        // console.log("State after componentDidMount(): " + JSON.stringify(this.state));
     }
 
     async componentWillUnmount() {
@@ -39,16 +40,6 @@ class DivisionManagmementScreen extends Component {
         console.log("Entered componentWillUnount()");
 
         await close(this.db);
-    }
-
-    _queryDivisions = async () => {
-
-        const sql = "SELECT * FROM DIVISION where DIVISION_PROGRAM_ID = ? ORDER BY DIVISION_NAME";
-
-        let result = await query(this.db, sql, [this.state.programId]); 
-
-        return result;
-
     }
 
     _query = async () => {
@@ -117,11 +108,6 @@ class DivisionManagmementScreen extends Component {
      
     );
 
-    _requery = async () => {
-
-        let result = await this._queryDivisions();
-        this.setState({divisions: result.result});
-    }
 
     render() {
         return (
