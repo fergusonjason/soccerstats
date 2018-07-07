@@ -75,8 +75,6 @@ class StaffManagementScreen extends Component {
 
     async componentDidMount() {
 
-        const sql = "SELECT * FROM STAFF";
-
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
         this._query();
 
