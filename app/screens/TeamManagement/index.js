@@ -66,12 +66,7 @@ class TeamManagementScreen extends Component {
     }
 
     _btnAddTeam = () => {
-        Alert.alert("Not Implemented",
-            "Adding Teams not yet implemented",
-            [
-                {text: "Ok"}
-            ]);
-        //this.props.navigation.navigate("AddTeamScreen", {divisionId: this.state.divisionId});
+        this.props.navigation.navigate("AddTeamScreen", {divisionId: this.state.divisionId, refresh: () => this._query()});
     }
 
     _renderItem = ({item}) => {
