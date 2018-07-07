@@ -8,24 +8,23 @@ class PortableButton extends Component {
         super(props);
     }
 
-    _iosButton = (label) => {
-        console.log("Entered _iosButton");
+    _iosButton = () => {
         return (
             <TouchableHighlight
                 disabled={this.props.disabled}
 >
                 <View style={styles.buttonStyle}>
-                    <Text style={styles.buttonText}>{label}</Text>
+                    <Text style={styles.buttonText}>{this.props.defaultLabel}</Text>
                 </View>
             </TouchableHighlight>
         );
 
     }
 
-    _androidButton = (label) => {
+    _androidButton = () => {
         return (
             <TouchableNativeFeedback
-                disabled={false}
+                disabled={this.props.disabled}
                 onPress={()=>this.props.onPress()}
                 background={TouchableNativeFeedback.Ripple("#202646", true)}>
                 <View style={styles.buttonStyle}>
@@ -52,7 +51,7 @@ PortableButton.propTypes = {
     onLongPress: PropTypes.func,
     defaultLabel: PropTypes.string.isRequired,
     altLabel: PropTypes.string,
-    disable: PropTypes.bool.isRequired
+    disabled: PropTypes.bool.isRequired
 }
 
 const styles = StyleSheet.create({
