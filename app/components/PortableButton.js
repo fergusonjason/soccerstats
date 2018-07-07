@@ -13,8 +13,8 @@ class PortableButton extends Component {
             <TouchableHighlight
                 disabled={this.props.disabled}
 >
-                <View style={styles.buttonStyle}>
-                    <Text style={styles.buttonText}>{this.props.defaultLabel}</Text>
+                <View style={this.props.style.buttonStyle}>
+                    <Text style={this.props.style.buttonText}>{this.props.defaultLabel}</Text>
                 </View>
             </TouchableHighlight>
         );
@@ -27,8 +27,8 @@ class PortableButton extends Component {
                 disabled={this.props.disabled}
                 onPress={()=>this.props.onPress()}
                 background={TouchableNativeFeedback.Ripple("#202646", true)}>
-                <View style={styles.buttonStyle}>
-                    <Text style={styles.buttonText}>{this.props.defaultLabel}</Text>
+                <View style={this.props.style.buttonStyle}>
+                    <Text style={this.props.style.buttonText}>{this.props.defaultLabel}</Text>
                 </View>
             </TouchableNativeFeedback>
         );
@@ -51,27 +51,11 @@ PortableButton.propTypes = {
     onLongPress: PropTypes.func,
     defaultLabel: PropTypes.string.isRequired,
     altLabel: PropTypes.string,
-    disabled: PropTypes.bool.isRequired
+    disabled: PropTypes.bool.isRequired,
+    style: PropTypes.shape({
+        buttonStyle: PropTypes.object.isRequired,
+        buttonText: PropTypes.object.isRequired
+        })
 }
-
-const styles = StyleSheet.create({
-    buttonStyle: {
-        alignItems: "flex-start",
-        justifyContent: "center",
-        backgroundColor: '#202646',
-        width: 75,
-        height: 25,
-        padding: 10,
-        borderRadius: 5,
-        marginVertical: 10,
-        marginHorizontal: 10
-    },
-    buttonText: {
-        fontSize:14,
-        color: '#ffffff',
-        alignSelf: "center"
-       
-    }
-});
 
 export default PortableButton;
