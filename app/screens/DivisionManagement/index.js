@@ -51,13 +51,14 @@ class DivisionManagmementScreen extends Component {
 
     }
 
-    _addTeam = async () => {
+    _addTeam = async (divisionId) => {
 
         console.log("Entered _addTeam()");
         
-        Alert.alert("Not implemented",
-        "Not implemented yet",
-        [{text: "Ok"}]);
+        this.props.navigation.navigate("TeamManagementScreen",{divisionId: divisionId})
+        // Alert.alert("Not implemented",
+        // "Not implemented yet",
+        // [{text: "Ok"}]);
 
 
     }
@@ -105,7 +106,7 @@ class DivisionManagmementScreen extends Component {
 
     _renderItem = ({item}) => (
         <DivisionManagementRow divisionId={item.DIVISION_ID} divisionName={item.DIVISION_NAME}
-            onAddTeam={() => {this._addTeam()}}
+            onAddTeam={() => {this._addTeam(item.DIVISION_ID)}}
             onEdit={() => {this._editDivision(item.DIVISION_ID)}}
             onDelete={() => {this._btnDeleteDivision(item.DIVISION_ID)}}/>        
      
