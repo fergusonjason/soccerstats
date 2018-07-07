@@ -1,12 +1,11 @@
 import React, {Component} from "react";
-import {View, Text, TextInput, TouchableOpacity, Alert} from "react-native";
+import {View, Text, TextInput, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 
 import {open, execute, close} from "./../../util/DbUtils";
 
 import PortableButton from "./../../components/PortableButton";
 
-import styles from "./styles";
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
 
 class AddDivisionScreen extends Component {
