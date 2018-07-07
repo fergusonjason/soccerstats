@@ -1,3 +1,5 @@
+// /apps/screens/StaffManagement/styles.js
+
 import {StyleSheet} from "react-native";
 
 export default styles = StyleSheet.create({
@@ -10,7 +12,7 @@ export default styles = StyleSheet.create({
     },
     bottomButtonArea: {
         alignSelf: "center",
-        position: "absolute",
+        position: 'absolute',
         bottom: 30
     },
     bottomButton: {
@@ -26,4 +28,4 @@ export default styles = StyleSheet.create({
         color: '#ffffff',
         textAlign: 'center'
     }
-})
+});
