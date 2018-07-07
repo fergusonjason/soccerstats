@@ -56,7 +56,9 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     rowTextSection: {
-        width: 100
+        width: 100,
+        alignSelf: "center",
+        margin: 10
     },
     rowButtonSection: {
         flexDirection: "row"
