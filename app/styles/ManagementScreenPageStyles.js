@@ -3,7 +3,10 @@ import {StyleSheet} from "react-native";
 export default managementPageStyles = StyleSheet.create({
     component: {
         flex: 1,
-        flexDirection: "column"
+        flexDirection: "column",
+        borderWidth: 1,
+        borderColor: "black",
+        backgroundColor: "green"
     },
     listArea: {
         flexDirection: "row"
@@ -11,7 +14,8 @@ export default managementPageStyles = StyleSheet.create({
     bottomButtonArea: {
         alignSelf: "center",
         position: "absolute",
-        bottom: 30
+        bottom: 30,
+        top: 0
     },
     bottomButton: {
         padding:10,
