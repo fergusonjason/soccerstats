@@ -1,8 +1,6 @@
 import React,{Component} from "react";
 import {View, Alert, FlatList} from "react-native";
-import SQLite from "react-native-sqlite-storage";
 import {withNavigation} from "react-navigation";
-
 
 import StaffManagementRow from "./StaffManagementRow";
 
@@ -10,9 +8,6 @@ import {open, query, close} from "./../../util/DbUtils";
 
 import PortableButton from "./../../components/PortableButton";
 import masterStyles, {listPage, bigButtonStyles} from "./../../styles/master";
-
-
-SQLite.enablePromise(true);
 
 class StaffManagementScreen extends Component {
 
