@@ -113,9 +113,8 @@ class DivisionManagmementScreen extends Component {
                     <FlatList 
                         data={this.state.divisions}
                         renderItem={this._renderItem}
-                        keyExtractor={(item) => item.DIVISION_ID.toString() }
-                        extraData={this.state.toggle}/>
-                </View>
+                        keyExtractor={(item) => item.DIVISION_ID.toString() } />
+                </View>        
                 <View style={listPage.bottomButtonArea}>
                     <PortableButton defaultLabel="Add Division"
                         onPress={() => {this._addDivision()}}
