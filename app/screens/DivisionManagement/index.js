@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {View, FlatList, TouchableOpacity, Text, StyleSheet, Alert} from "react-native";
+import {View, FlatList, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 
 import {open,query,close} from "./../../util/DbUtils";
@@ -51,6 +51,14 @@ class DivisionManagmementScreen extends Component {
 
     }
 
+    _query = async () => {
+
+        const sql = "SELECT * FROM DIVISION where DIVISION_PROGRAM_ID = ? ORDER BY DIVISION_NAME";
+
+        let result = await query(this.db, sql, [this.state.programId]);
+        this.setState({divisions: result.result});
+    }
+
     _addTeam = async (divisionId) => {
 
         console.log("Entered _addTeam()");
@@ -63,7 +71,7 @@ class DivisionManagmementScreen extends Component {
 
         console.log("Entered _addDivision");
 
-        this.props.navigation.navigate("AddDivisionScreen", {refresh: () => this._requery()});
+        this.props.navigation.navigate("AddDivisionScreen", {refresh: () => this._query()});
     }
 
     _editDivision = async (divisionId) => {
@@ -82,22 +90,23 @@ class DivisionManagmementScreen extends Component {
 
         const sql = "DELETE FROM DIVISION WHERE DIVISION_ID = ?";
 
-        let result = await execute(this.db, sql, [divisionId]);
+        await execute(this.db, sql, [divisionId]);
 
-        console.log("Rows affected: " + result.rowsAffected);
+        this._query();
 
-        console.log("Exited _deleteDivision");
 
     }
 
     _btnDeleteDivision = async (divisionId) => {
 
         console.log("Entered _btnDeleteDivision, divisionId: " + divisionId);
-        await this._deleteDivision(divisionId);
-        let result = await this._queryDivisions();
-        this.setState({divisions: result.result});
 
-        console.log("Exited _btnDeleteDivision");
+        Alert.alert("Are you sure?",
+            "You will not be able to undo this. Are you sure?",
+            [
+                {text: "Ok", onPress: ()=>{this._deleteDivision(divisionId)}},
+                {text: "Cancel"}
+            ]);
     }
 
     _renderItem = ({item}) => (
