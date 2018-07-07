@@ -30,9 +30,6 @@ class DivisionManagmementScreen extends Component {
 
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
         this._query();
-        // let result = await this._queryDivisions(); // initially populate the divisions
-        // this.setState({divisions: result.result});
-        // console.log("State after componentDidMount(): " + JSON.stringify(this.state));
     }
 
     async componentWillUnmount() {
