@@ -2,6 +2,7 @@
 
 import React, {Component} from "react";
 import {View, FlatList, Alert} from "react-native";
+import {withNavigation} from "react-navigation";
 
 import {open, close, query, execute} from "./../../util/DbUtils";
 
@@ -57,8 +58,8 @@ class TeamManagementScreen extends Component {
     }
 
     _btnEditTeam = (teamId) => {
-
-        this.props.navigation.navigate("EditTeamPage",{teamId: teamId, refresh: () => this._query()});
+        console.log("Entered _btnEditTeam, teamId: " + teamId);
+        this.props.navigation.navigate("EditTeamScreen",{teamId: teamId, divisionId: this.state.divisionId, refresh: () => this._query()});
     }
 
     _btnAddPlayers = (teamId) => {
@@ -74,9 +75,9 @@ class TeamManagementScreen extends Component {
         return (
             <TeamManagementRow
                 teamName={item.TEAM_NAME}
-                onPlayers={() => {this._btnAddPlayers()}}
-                onEdit={() =>{this._btnEditTeam()}}
-                onDelete={()=>{this._btnDeleteTeam()}} />
+                onPlayers={() => {this._btnAddPlayers(item.TEAM_ID)}}
+                onEdit={() =>{this._btnEditTeam(item.TEAM_ID)}}
+                onDelete={()=>{this._btnDeleteTeam(item.TEAM_ID)}} />
         );
     }
 
@@ -101,4 +102,4 @@ class TeamManagementScreen extends Component {
     }
 }
 
-export default TeamManagementScreen;
+export default withNavigation(TeamManagementScreen);
