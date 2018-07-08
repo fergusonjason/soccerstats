@@ -16,13 +16,6 @@ class TeamManagementRow extends Component {
         }
     }
 
-    _btnPressPlayers = () => {
-        this.props.onPlayers();
-    }
-
-    _btnLongPressPlayers = () => {
-
-    }
     render() {
         return(
             <View style={rowStyles.rowComponent}>
@@ -32,17 +25,17 @@ class TeamManagementRow extends Component {
                 <View style={rowStyles.rowButtonSection}>
                     <PortableButton defaultLabel="Players"
                         disabled={false}
-                        onPress={() => {this._btnPressPlayers()}}
+                        onPress={() => {this.props.onPlayers()}}
                         style={portableButtonStyles}
                         />
                     <PortableButton defaultLabel="Edit"
                         disabled={false}
-                        onPress={() => {}} 
+                        onPress={() => {this.props.onEdit(this.state.teamId)}} 
                         style={portableButtonStyles}
                         />
                     <PortableButton defaultLabel="Delete"
                         disabled={false}
-                        onPress={() => {}}
+                        onPress={() => {this.props.onDelete()}}
                         style={portableButtonStyles}
                         />
                 </View>
