@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { View} from "react-native";
+import { View, Alert} from "react-native";
+import {withNavigation} from "react-navigation";
 
-import MenuNavigationButton from "./../../components/MenuNavigationButton";
-import styles from "./styles";
+import PortableButton from "./../../components/PortableButton";
+
+import {giantButtonStyles} from "./../../styles/master";
 
 /**
  * HomeScreen component definition
@@ -19,20 +21,75 @@ class HomeScreen extends Component {
         super(props);
     }
     
+    _clkAction = (target) => {
+        switch (target) {
+            case "New Game":
+                Alert.alert("Not implemented",
+                    "This component is not implemented",
+                    [
+                        {text: "Ok"}
+                    ]
+                );            
+                break;
+            case "Statistics":
+                Alert.alert("Not implemented",
+                    "This component is not implemented",
+                    [
+                        {text: "Ok"}
+                    ]
+                );              
+                break;
+            case "League Management":
+                this.props.navigation.navigate("DivisionManagementScreen");
+                break;
+            case "Staff Management":
+                this.props.navigation.navigate("StaffManagementScreen");
+                break;
+            case "Settings":
+                Alert.alert("Not implemented",
+                    "This component is not implemented",
+                    [
+                        {text: "Ok"}
+                    ]
+                );              
+                break;
+        }
+    }
+
     /**
      * Render the HomeScreen component
      */
     render() {
         return (
             <View>
-                <MenuNavigationButton label="New Game"  />
-                <MenuNavigationButton label="Statistics" />
-                <MenuNavigationButton label="League Management" target="DivisionManagementScreen" />
-                <MenuNavigationButton label="Staff Management" target="StaffManagementScreen" />
-                <MenuNavigationButton label="Settings"  />
+                <PortableButton defaultLabel="New Game"
+                    onPress={()=>{this._clkAction("New Game")}}
+                    onLongPress={()=>{}}
+                    disabled={false} 
+                    style={giantButtonStyles}/>
+                <PortableButton defaultLabel="Statistics"
+                    onPress={()=>{this._clkAction("Statistics")}}
+                    onLongPress={()=>{}}
+                    disabled={false} 
+                    style={giantButtonStyles}/>                    
+                <PortableButton defaultLabel="League Management"
+                    onPress={()=>{this._clkAction("League Management")}}
+                    onLongPress={()=>{}}
+                    disabled={false} 
+                    style={giantButtonStyles}/>          
+                <PortableButton defaultLabel="Staff Management"
+                    onPress={()=>{this._clkAction("Staff Management")}}
+                    onLongPress={()=>{}}
+                    disabled={false} 
+                    style={giantButtonStyles}/>
+                <PortableButton defaultLabel="Settings"
+                    onPress={()=>{this._clkAction("Settings")}}
+                    onLongPress={()=>{}}
+                    disabled={false} 
+                    style={giantButtonStyles}/>                    
             </View>
         );
     }
 }
 
-export default HomeScreen;
+export default withNavigation(HomeScreen);
