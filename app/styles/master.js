@@ -67,10 +67,17 @@ const rowStyles = StyleSheet.create({
         alignSelf: "center",
         margin: 10
     },
+    threeButtonRowTextSection: {
+        width: 100,
+        alignSelf: "center",
+        margin: 10
+    },
     rowButtonSection: {
         flexDirection: "row"
     }
 });
+
+
 
 portableButtonStyles = StyleSheet.create({
     buttonStyle: {
@@ -110,5 +117,20 @@ bigButtonStyles = StyleSheet.create({
     }
 });
 
-export {dataEntryPage, listPage, rowStyles, portableButtonStyles, bigButtonStyles};
+giantButtonStyles = StyleSheet.create({
+    buttonText: {
+        fontSize:20,
+        color: '#ffffff',
+        textAlign: 'center'
+      },
+      buttonStyle: {
+        padding:10,
+        backgroundColor: '#202646',
+        borderRadius:5,
+        marginVertical: 20,
+        marginHorizontal: 20
+      }    
+});
+
+export {dataEntryPage, listPage, rowStyles, portableButtonStyles, bigButtonStyles, giantButtonStyles};
 export default masterStyles;
