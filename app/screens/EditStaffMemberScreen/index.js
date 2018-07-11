@@ -1,6 +1,6 @@
 // /app/screens/EditStaffMemberScreen/index.js
 import React, {Component} from "react";
-import {View, Text, TextInput, TouchableOpacity, Alert} from "react-native";
+import {View, Text, TextInput, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 
 import {open, query, close, execute} from "./../../util/DbUtils";
@@ -18,10 +18,37 @@ class EditStaffMemberScreen extends Component {
         // undefined error when render() runs before the database query returns the
         // values. Don't get fancy with an object, just store the values in their own keys.
         this.state = {
-            STAFF_NAME: "",
+            STAFF_LAST_NAME: "",
+            STAFF_FIRST_NAME: "",
             STAFF_EMAIL: "",
+            STAFF_CELL: "",
             STAFF_ID: -1
         }
+    }
+
+    _query = async () => {
+
+        let id = this.props.navigation.getParam("id",-1);
+
+        // load the record
+        const sql = "SELECT * FROM STAFF WHERE STAFF_ID = ?";
+
+        let result = await query(this.db, sql, [id]);
+
+        if (result.result.length > 0) {
+            let row = result.result[0];
+            this.setState({"STAFF_LAST_NAME": row.STAFF_LAST_NAME,
+                "STAFF_FIRST_NAME": row.STAFF_FIRST_NAME,
+                "STAFF_EMAIL": row.STAFF_EMAIL,
+                "STAFF_CELL": row.STAFF_CELL});
+        } else {
+            Alert.alert("Database error",
+                "Unable to load user from database",
+                [
+                    {text:"Ok"}
+                ]);
+        }
+        
     }
 
     _btnUpdate = async () => {
@@ -29,8 +56,8 @@ class EditStaffMemberScreen extends Component {
         // run an update
         let id = this.props.navigation.getParam("id",-1);
 
-        const sql = "UPDATE STAFF SET STAFF_NAME = ?, STAFF_EMAIL = ? WHERE STAFF_ID = ?";
-        let result = await execute(this.db, sql,[this.state.STAFF_NAME, this.state.STAFF_EMAIL, id]);
+        const sql = "UPDATE STAFF SET STAFF_LAST_NAME = ?, STAFF_FIRST_NAME = ?, STAFF_EMAIL = ?, STAFF_CELL = ? WHERE STAFF_ID = ?";
+        let result = await execute(this.db, sql,[this.state.STAFF_LAST_NAME, this.state.STAFF_FIRST_NAME, this.state.STAFF_EMAIL, this.state.STAFF_CELL, id]);
 
         console.log("Records updated: " + result.rowsAffected);
 
@@ -52,51 +79,46 @@ class EditStaffMemberScreen extends Component {
 
     async componentDidMount() {
 
-        // get the id to load from the nav props
-        let id = this.props.navigation.getParam("id",-1);
-        console.log("ID: " + id);
-
-        // load the record
-        const sql = "SELECT * FROM STAFF WHERE STAFF_ID = ?";
-
         // db has to be opened here instead of the constructor due to the await keyword
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
 
-        let result = await query(this.db, sql, [id]);
-        console.log("Result count: " + result.result.length);
+        await this._query();
 
-        // this probably won't happen since we are getting the id from the nav props, but
-        // safety third!
-        if (result.result.length > 0) {
-            console.log("Result: " + JSON.stringify(result.result[0]));
-            this.setState({STAFF_NAME: result.result[0].STAFF_NAME, STAFF_EMAIL: result.result[0].STAFF_EMAIL});
-            console.log("State: " + JSON.stringify(this.state));
-        }
     }
 
-    componentWillUnmount() {
+    async componentWillUnmount() {
 
-        this.db.close();
+        await close(this.db);
+
     }
 
     render() {
         return (
             <View style={masterStyles.component}>
                 <View style={dataEntryPage.inputArea}>
-                    <Text>Name:</Text>
+                    <Text>Last Name:</Text>
                     <TextInput 
-                        onChangeText={(text)=>{ this.setState({STAFF_NAME: text}) }}
-                        value={this.state.STAFF_NAME} />
+                        onChangeText={(text)=>{ this.setState({STAFF_LAST_NAME: text}) }}
+                        value={this.state.STAFF_LAST_NAME} />
+                    <Text>First Name:</Text>
+                    <TextInput 
+                        onChangeText={(text)=>{ this.setState({STAFF_FIRST_NAME: text}) }}
+                        value={this.state.STAFF_FIRST_NAME} />
                     <Text>Email:</Text>
                     <TextInput 
                          onChangeText={(text) => { this.setState({STAFF_EMAIL: text}) }}
                          value={this.state.STAFF_EMAIL} />
+                    <Text>Cell:</Text>
+                    <TextInput 
+                        onChangeText={(text)=>{ this.setState({STAFF_CELL: text}) }}
+                        value={this.state.STAFF_CELL} />                         
                 </View>
                 <View style={dataEntryPage.bottomButtonArea}>
                     <PortableButton defaultLabel="Update Staff Member"
                         onPress={()=>{this._btnUpdate()}}
                         onLongPress={()=>{}}
-                        style={bigButtonStyles} />
+                        style={bigButtonStyles} 
+                        disabled={false}/>
                 </View>
             </View>
         );
