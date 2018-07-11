@@ -11,8 +11,6 @@ import masterStyles, {listPage, bigButtonStyles} from "./../../styles/master";
 
 class StaffManagementScreen extends Component {
 
-    db = null;
-
     constructor(props) {
         super(props);
 
