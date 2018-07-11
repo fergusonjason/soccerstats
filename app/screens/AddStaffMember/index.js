@@ -1,12 +1,11 @@
 import React, {Component} from "react";
-import {View, Text, TextInput, TouchableOpacity, Alert} from "react-native";
+import {View, Text, TextInput, Alert, Switch} from "react-native";
 import {withNavigation} from "react-navigation";
 
-import {open, query, close, execute} from "./../../util/DbUtils";
+import {open, close, execute} from "./../../util/DbUtils";
 
 import PortableButton from "./../../components/PortableButton";
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
-import styles from "./styles";
 
 class AddStaffMemberScreen extends Component {
 
@@ -17,17 +16,22 @@ class AddStaffMemberScreen extends Component {
         // undefined error when render() runs before the database query returns the
         // values. Don't get fancy with an object, just store the values in their own keys.
         this.state = {
-            STAFF_NAME: "",
+            STAFF_LAST_NAME: "",
+            STAFF_FIRST_NAME: "",
             STAFF_EMAIL: "",
-            STAFF_ID: -1
+            STAFF_CELL: "",
+            STAFF_ID: -1,
+            STAFF_IS_COMMISIONER: -1,
+            STAFF_IS_COACH: -1
         }
     }
 
     _btnUpdate = async () => {
 
         // run an insert (What will happen with a constraint violation? DB err 7?)
-        const sql = "INSERT INTO STAFF(STAFF_NAME, STAFF_EMAIL) VALUES (?,?)";
-        let result = await execute(this.db, sql,[this.state.STAFF_NAME, this.state.STAFF_EMAIL]);
+        const sql = "INSERT INTO STAFF(STAFF_LAST_NAME, STAFF_FIRST_NAME, STAFF_EMAIL, STAFF_CELL) VALUES (?,?,?,?)";
+        let result = await execute(this.db, sql,[this.state.STAFF_LAST_NAME, this.state.STAFF_FIRST_NAME, 
+            this.state.STAFF_EMAIL, this.state.STAFF_CELL]);
 
         console.log("Records updated: " + result.rowsAffected);
 
@@ -50,45 +54,42 @@ class AddStaffMemberScreen extends Component {
 
     async componentDidMount() {
 
-        // get the id to load from the nav props
-        let id = this.props.navigation.getParam("id",-1);
-        console.log("ID: " + id);
-
-        // load the record
-        const sql = "SELECT * FROM STAFF WHERE STAFF_ID = ?";
-
         // db has to be opened here instead of the constructor due to the await keyword
         this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
 
-        let result = await query(this.db, sql, [id]);
-        console.log("Result count: " + result.result.length);
-
-        // this probably won't happen since we are getting the id from the nav props, but
-        // safety third!
-        if (result.result.length > 0) {
-            console.log("Result: " + JSON.stringify(result.result[0]));
-            this.setState({STAFF_NAME: result.result[0].STAFF_NAME, STAFF_EMAIL: result.result[0].STAFF_EMAIL});
-            console.log("State: " + JSON.stringify(this.state));
-        }
     }
 
-    componentWillUnmount() {
+    async componentWillUnmount() {
 
-        this.db.close();
+        await close(this.db);
+
     }
 
     render() {
         return (
             <View style={masterStyles.component}>
                 <View style={dataEntryPage.inputArea}>
-                    <Text>Name:</Text>
+                    <Text>Last Name:</Text>
                     <TextInput 
-                        onChangeText={(text)=>{ this.setState({STAFF_NAME: text}) }}
-                        value={this.state.STAFF_NAME} />
+                         onChangeText={(text) => { this.setState({STAFF_LAST_NAME: text}) }}
+                         value={this.state.STAFF_LAST_NAME} />                    
+                    <Text>First Name:</Text>
+                    <TextInput 
+                         onChangeText={(text) => { this.setState({STAFF_FIRST_NAME: text}) }}
+                         value={this.state.STAFF_FIRST_NAME} />                    
                     <Text>Email:</Text>
                     <TextInput 
                          onChangeText={(text) => { this.setState({STAFF_EMAIL: text}) }}
                          value={this.state.STAFF_EMAIL} />
+                    <Text>Cell:</Text>
+                    <TextInput 
+                         onChangeText={(text) => { this.setState({STAFF_CELL: text}) }}
+                         value={this.state.STAFF_CELL} />       
+                    <Text>Coach</Text>
+                    <Switch disabled={false}
+                        value = {true}
+                        onValueChange = {(value) => {value === true ? this.setState({STAFF_IS_COMMISIONER: 1}) : this.setState({"STAFF_IS_COMMISIONER": 0})}} 
+                    />
                 </View>
                 <View style={dataEntryPage.bottomButtonArea}>
                     <PortableButton defaultLabel="Add Staff Member"
