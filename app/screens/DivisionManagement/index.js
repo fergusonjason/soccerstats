@@ -117,6 +117,7 @@ class DivisionManagmementScreen extends Component {
                 </View>        
                 <View style={listPage.bottomButtonArea}>
                     <PortableButton defaultLabel="Add Division"
+                        disabled={false}
                         onPress={() => {this._addDivision()}}
                         onLongPress={() => {}}
                         style={bigButtonStyles} />
