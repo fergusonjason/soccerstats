@@ -28,6 +28,8 @@ class AddStaffMemberScreen extends Component {
 
     _btnUpdate = async () => {
 
+        console.log("Entered _btnUpdate");
+        
         // run an insert (What will happen with a constraint violation? DB err 7?)
         const sql = "INSERT INTO STAFF(STAFF_LAST_NAME, STAFF_FIRST_NAME, STAFF_EMAIL, STAFF_CELL) VALUES (?,?,?,?)";
         let result = await execute(this.db, sql,[this.state.STAFF_LAST_NAME, this.state.STAFF_FIRST_NAME, 
