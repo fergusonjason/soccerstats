@@ -51,6 +51,8 @@ class StaffManagementScreen extends Component {
 
     _query = async () => {
 
+        console.log("Entered _query()");
+        
         const sql = "SELECT * FROM STAFF";
         let result = await query(this.db, sql, []);
 
