@@ -34,14 +34,14 @@ query = async (db, sql, params) => {
             console.log("Beginning transaction");
 
             tx.executeSql(sql, params, (tx, rs) => {
-                let length = rs.rows.length;
+                let totalRows = rs.rows.length;
                 let result = [];
 
-                for (i = 0; i < length; i++) {
+                for (i = 0; i < totalRows; i++) {
                     result.push(rs.rows.item(i));
                 }
 
-                resolve({ result });
+                resolve({ result, totalRows });
             }, (err) => { 
                 console.log("Error occured executing sql: code: " + err.code + ", message: " + err.message + "(" + JSON.stringify(err) + ")");
 
