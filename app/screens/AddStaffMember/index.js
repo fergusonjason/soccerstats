@@ -37,21 +37,33 @@ class AddStaffMemberScreen extends Component {
 
         console.log("Records updated: " + result.rowsAffected);
 
-        if (result.rowsAffected > 0) {
+        validationResults = this._validate(result);
+        if (validationResults == true) {
             this.props.navigation.state.params.refresh();
-            // navigate back to Staff Management
             this.props.navigation.navigate("StaffManagementScreen");
+        }
+
+    }
+
+    _validate = (dbresult) => {
+
+        if (!dbresult.hasErrors) {
+
+            return true;
+
         } else {
-            // show an alert saying something went wrong
+
+            // TODO: convert the error message to something less databasey
             Alert.alert(
                 "Database error",
-                "Unable to insert record in database",
+                "Unable to insert record in database: " + dbresult.errorMessage,
                 [
                     {text: "Ok"}
                 ]
-            )
-        }
+            );
 
+            return false;
+        }
     }
 
     async componentDidMount() {
