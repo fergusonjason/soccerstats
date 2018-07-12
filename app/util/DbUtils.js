@@ -42,7 +42,12 @@ query = async (db, sql, params) => {
                 }
 
                 resolve({ result });
-            }, (err) => { console.log("Error in executing sql: code: " + err.code + ", message: " + err.message + "(" + JSON.stringify(err) + ")") });
+            }, (err) => { 
+                console.log("Error occured executing sql: code: " + err.code + ", message: " + err.message + "(" + JSON.stringify(err) + ")");
+
+            });
+
+
         });
     });
 
@@ -58,18 +63,36 @@ execute = async (db, sql, params) => {
         db.transaction((tx) => {
             console.log("Beginning transaction");
             tx.executeSql(sql, params, (tx, rs) => {
+
+                let hasErrors = false;
+                let errorMessage = "";
+                let sqliteErrorCode = -1;
                 let rowsAffected = rs.rowsAffected;
                 
-                resolve({ rowsAffected });
-                console.log("Rows affected: " + rowsAffected);
-            })
+                resolve({hasErrors, errorMessage, sqliteErrorCode, rowsAffected});
+
+            });
         }, (err) => {
-            console.log("Error in executing sql: code: " + err.code + ", message: " + err.message + "(" + JSON.stringify(err) + ")")
+            console.log("Error occured in sql: code: " + err.code + ", message: " + err.message);
+
+            // use a regular expression to extract the error message and sqlite error code
+            let message = err.message;
+            let regex = /^(.*) \(code (\d+)\)$/g;
+            let regexResult = regex.exec(message);
+
+            let hasErrors = true;
+            let errorMessage = regexResult[1];
+            let sqliteErrorCode = new Number(regexResult[2]);
+            let rowsAffected = 0;
+
+            resolve({hasErrors, errorMessage, sqliteErrorCode, rowsAffected});
         });
     });
 
+
     let queryResult = await result;
-    console.log("Exiting execute(), queryResult: " + JSON.stringify(result));
+
+    console.log("Exiting execute(), queryResult: " + JSON.stringify(queryResult));
     return queryResult;
 
 }
