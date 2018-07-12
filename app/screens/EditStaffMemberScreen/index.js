@@ -63,6 +63,7 @@ class EditStaffMemberScreen extends Component {
 
         if (result.rowsAffected > 0) {
             // navigate back to Staff Management
+            this.props.navigation.state.params.refresh();
             this.props.navigation.navigate("StaffManagementScreen");
         } else {
             // show an alert saying something went wrong
