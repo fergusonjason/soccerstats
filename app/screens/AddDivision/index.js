@@ -1,10 +1,11 @@
 import React, {Component} from "react";
 import {View, Text, TextInput, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
-
-import {open, execute, close} from "./../../util/DbUtils";
+import {connect} from "react-redux";
 
 import PortableButton from "./../../components/PortableButton";
+
+import {addDivision} from "./../../redux/actions/divisionActions";
 
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
 
@@ -20,28 +21,10 @@ class AddDivisionScreen extends Component {
 
         console.log("Entered _btnAdd");
 
-        this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
+        let division = {DIVISION_NAME: this.state.DIVISION_NAME,
+            DIVISION_PROGRAM_ID: 1};
+        this.props.addDivision(division);
 
-        // TODO: don't hard-code the 1
-        const sql = "INSERT INTO DIVISION(DIVISION_NAME, DIVISION_PROGRAM_ID) VALUES(?, 1)";
-        let result = await execute(this.db, sql, [this.state.DIVISION_NAME]);
-        
-        console.log("Result: " + JSON.stringify(result));
-        if (result.rowsAffected == 0) {
-            Alert.alert(
-                "Database error",
-                "Unable to insert record in database",
-                [
-                    {text: "Ok"}
-                ]
-            )
-        } else {
-            console.log("Rows affected: " + result.rowsAffected);
-        }
-
-        close(this.db);
-
-        this.props.navigation.state.params.refresh();
         this.props.navigation.navigate("DivisionManagementScreen",{programId: 1});
     }
 
@@ -64,4 +47,15 @@ class AddDivisionScreen extends Component {
     }
 }
 
-export default withNavigation(AddDivisionScreen);
+function mapStateToProps(state) {
+    return {
+    
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        addDivision: (division) => dispatch(addDivision(division))
+    }
+}
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(AddDivisionScreen));
