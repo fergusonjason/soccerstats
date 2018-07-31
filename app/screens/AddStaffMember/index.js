@@ -1,10 +1,12 @@
 import React, {Component} from "react";
 import {View, Text, TextInput, Alert, Switch} from "react-native";
 import {withNavigation} from "react-navigation";
-
-import {open, close, execute} from "./../../util/DbUtils";
+import {connect} from "react-redux";
 
 import PortableButton from "./../../components/PortableButton";
+
+import {addStaffMember} from "./../../redux/actions/staffActions";
+
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
 
 class AddStaffMemberScreen extends Component {
@@ -29,19 +31,14 @@ class AddStaffMemberScreen extends Component {
     _btnUpdate = async () => {
 
         console.log("Entered _btnUpdate");
-        
-        // run an insert (What will happen with a constraint violation? DB err 7?)
-        const sql = "INSERT INTO STAFF(STAFF_LAST_NAME, STAFF_FIRST_NAME, STAFF_EMAIL, STAFF_CELL) VALUES (?,?,?,?)";
-        let result = await execute(this.db, sql,[this.state.STAFF_LAST_NAME, this.state.STAFF_FIRST_NAME, 
-            this.state.STAFF_EMAIL, this.state.STAFF_CELL]);
 
-        console.log("Records updated: " + result.rowsAffected);
+            let staffMember = {STAFF_LAST_NAME: this.state.STAFF_LAST_NAME,
+                STAFF_FIRST_NAME: this.state.STAFF_FIRST_NAME,
+                STAFF_EMAIL: this.state.STAFF_EMAIL,
+                STAFF_CELL: this.state.STAFF_CELL};
 
-        validationResults = this._validate(result);
-        if (validationResults == true) {
-            this.props.navigation.state.params.refresh();
+            this.props.addStaffMember(staffMember);
             this.props.navigation.navigate("StaffManagementScreen");
-        }
 
     }
 
@@ -53,7 +50,6 @@ class AddStaffMemberScreen extends Component {
 
         } else {
 
-            // TODO: convert the error message to something less databasey
             Alert.alert(
                 "Database error",
                 "Unable to insert record in database: " + dbresult.errorMessage,
@@ -64,19 +60,6 @@ class AddStaffMemberScreen extends Component {
 
             return false;
         }
-    }
-
-    async componentDidMount() {
-
-        // db has to be opened here instead of the constructor due to the await keyword
-        this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-
-    }
-
-    async componentWillUnmount() {
-
-        await close(this.db);
-
     }
 
     render() {
@@ -117,4 +100,18 @@ class AddStaffMemberScreen extends Component {
     }
 }
 
-export default withNavigation(AddStaffMemberScreen);
+function mapStateToProps(state) {
+
+    return {
+
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+
+    return {
+        addStaffMember: (member) => dispatch(addStaffMember(member))
+    }
+}
+
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(AddStaffMemberScreen));
