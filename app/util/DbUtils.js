@@ -1,6 +1,7 @@
 import SQLite from "react-native-sqlite-storage";
 
 SQLite.DEBUG(true);
+SQLite.enablePromise(true);
 
 open = (dbparams) => {
 
@@ -97,4 +98,64 @@ execute = async (db, sql, params) => {
 
 }
 
-export { open, close, query, execute };
+/**
+ * Query method that returns a promise. Used so that redux/thunk don't get pissy.
+ * 
+ * SQLite object's enablePromise must be true for this to work
+ * 
+ * @async
+ * @function
+ * @param {string} sql for method to execute
+ * @param {array} params parameters for sql statement
+ * @returns {Promise<array>} The array of objects returned by the query
+ */
+queryPromise = async (sql, params) => {
+
+    console.log(`Entered queryPromise, sql: ${sql}, params: ${params} `);
+
+    // enable promise has to be true
+    let db = null;
+
+    let dbPromise2 = SQLite.openDatabase({ name: "stats.db", createFromLocation: "~soccerstats.db" });
+
+    let results = dbPromise2.then((resolvedDb) => {
+        // this is a dirty way of doing this, but I need the resolved db for the next peice of the chain
+        db = resolvedDb; 
+        return query(db, sql, params);
+    }).then((queryResults) => {
+        close(db);
+        
+        return queryResults;
+    })
+
+    return results;
+}
+
+/**
+ * Function to execute a sql statement
+ * 
+ * @async
+ * @function
+ * @param {string} sql sql statement to execute (UPDATE, DELETE, INSERT)
+ * @param {Array<string>} params params for the SQL statement
+ * @returns {Promise<object>} object with the following keys: hasErrors, errorMessage, sqlLiteErrorCode, rowsAffected
+ */
+function executePromise(sql, params) {
+
+    let db = null;
+
+    let dbPromise2 = SQLite.openDatabase({ name: "stats.db", createFromLocation: "~soccerstats.db" });
+
+    let results = dbPromise2.then((resolvedDb) => {
+        db = resolvedDb;
+        return execute(db, sql, params);
+    }).then((queryResults) => {
+        close(db);
+        return queryResults;
+    });
+
+    return results;
+
+}
+
+export { open, close, query, execute, queryPromise, executePromise };
