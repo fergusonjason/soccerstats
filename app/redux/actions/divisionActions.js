@@ -37,6 +37,16 @@ export function getDivision(divisionId) {
     return (dispatch) => {
         let sql = "SELECT * FROM DIVISION WHERE DIVISION_ID=?";
         let params = [divisionId];
+        
+        dispatch(isLoadingData(true));
+
+        queryPromise(sql, params) 
+            .then((queryResults) => {
+                dispatch(isLoadingData(false));
+                return queryResults;
+            }).then((queryResults) => {
+                dispatch(getDivisionSuccess(queryResults.result[0]));
+            })
     }
 }
 
@@ -75,8 +85,16 @@ export function addDivisionSuccess(division) {
 
 export function editDivision(division) {
     return (dispatch) => {
-        let sql = "UPDATE DIVISION SET DIVISION_ID=? WHERE DIVISION_ID = ?";
-        let params = [];
+        let sql = "UPDATE DIVISION SET DIVISION_NAME=? WHERE DIVISION_ID = ?";
+        let params = [division.DIVISION_NAME];
+
+        dispatch(isLoadingData(true));
+        executePromise(sql, params)
+            .then((queryResults) => {
+                dispatch(isLoadingData(false));
+            }).then(() => {
+                dispatch(getAllDivisions(1));
+            })
     }
 }
 
