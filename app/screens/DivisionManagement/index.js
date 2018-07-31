@@ -1,6 +1,7 @@
 import React, {Component} from "react";
 import {View, FlatList, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
+import {connect} from "react-redux";
 
 import {open,query,close} from "./../../util/DbUtils";
 
@@ -9,6 +10,7 @@ import PortableButton from "./../../components/PortableButton";
 import masterStyles, {listPage, bigButtonStyles} from "./../../styles/master";
 
 import DivisionManagementRow from "./DivisionManagementRow";
+import { getAllDivisions } from "../../redux/actions/divisionActions";
 
 class DivisionManagmementScreen extends Component {
 
@@ -28,23 +30,24 @@ class DivisionManagmementScreen extends Component {
 
         console.log("Entered componentDidMount()");
 
-        this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-        this._query();
+        this.props.getDivisions(1);
+        // this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
+        // this._query();
     }
 
     async componentWillUnmount() {
 
-        console.log("Entered componentWillUnount()");
+        // console.log("Entered componentWillUnount()");
 
-        await close(this.db);
+        // await close(this.db);
     }
 
     _query = async () => {
 
-        const sql = "SELECT * FROM DIVISION where DIVISION_PROGRAM_ID = ? ORDER BY DIVISION_NAME";
+        // const sql = "SELECT * FROM DIVISION where DIVISION_PROGRAM_ID = ? ORDER BY DIVISION_NAME";
 
-        let result = await query(this.db, sql, [this.state.programId]);
-        this.setState({divisions: result.result});
+        // let result = await query(this.db, sql, [this.state.programId]);
+        // this.setState({divisions: result.result});
     }
 
     _addTeam = async (divisionId) => {
@@ -57,16 +60,16 @@ class DivisionManagmementScreen extends Component {
 
     _addDivision = () => {
 
-        console.log("Entered _addDivision");
+        // console.log("Entered _addDivision");
 
-        this.props.navigation.navigate("AddDivisionScreen", {refresh: () => this._query()});
+        // this.props.navigation.navigate("AddDivisionScreen", {refresh: () => this._query()});
     }
 
     _editDivision = async (divisionId) => {
 
-        console.log("Entered _editDivision");
+        // console.log("Entered _editDivision");
 
-        this.props.navigation.navigate("EditDivisionScreen", {divisionId: divisionId, refresh: () => this._requery()});
+        // this.props.navigation.navigate("EditDivisionScreen", {divisionId: divisionId, refresh: () => this._requery()});
 
     }
 
@@ -74,27 +77,27 @@ class DivisionManagmementScreen extends Component {
 
     _deleteDivision = async (divisionId) => {
 
-        console.log("Entered _deleteDivision, divisionId: " + divisionId);
+        // console.log("Entered _deleteDivision, divisionId: " + divisionId);
 
-        const sql = "DELETE FROM DIVISION WHERE DIVISION_ID = ?";
+        // const sql = "DELETE FROM DIVISION WHERE DIVISION_ID = ?";
 
-        await execute(this.db, sql, [divisionId]);
+        // await execute(this.db, sql, [divisionId]);
 
-        this._query();
+        // this._query();
 
 
     }
 
     _btnDeleteDivision = async (divisionId) => {
 
-        console.log("Entered _btnDeleteDivision, divisionId: " + divisionId);
+        // console.log("Entered _btnDeleteDivision, divisionId: " + divisionId);
 
-        Alert.alert("Are you sure?",
-            "You will not be able to undo this. Are you sure?",
-            [
-                {text: "Ok", onPress: ()=>{this._deleteDivision(divisionId)}},
-                {text: "Cancel"}
-            ]);
+        // Alert.alert("Are you sure?",
+        //     "You will not be able to undo this. Are you sure?",
+        //     [
+        //         {text: "Ok", onPress: ()=>{this._deleteDivision(divisionId)}},
+        //         {text: "Cancel"}
+        //     ]);
     }
 
     _renderItem = ({item}) => (
@@ -111,7 +114,7 @@ class DivisionManagmementScreen extends Component {
             <View style={masterStyles.component}>
                 <View style={listPage.listArea}>
                     <FlatList 
-                        data={this.state.divisions}
+                        data={this.props.divisions}
                         renderItem={this._renderItem}
                         keyExtractor={(item) => item.DIVISION_ID.toString() } />
                 </View>        
@@ -127,4 +130,16 @@ class DivisionManagmementScreen extends Component {
     }
 }
 
-export default withNavigation(DivisionManagmementScreen);
+function mapStateToProps(state) {
+    return {
+        divisions: state.divisions
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        getDivisions: (programId) => dispatch(getAllDivisions(programId))
+    }
+}
+
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(DivisionManagmementScreen));
