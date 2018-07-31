@@ -16,14 +16,6 @@ class DivisionManagmementScreen extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            programId: this.props.navigation.getParam("programId", 1),
-            divisions: [],
-            toggle: true
-        };
-
-        
     }
 
     componentDidMount() {
