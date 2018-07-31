@@ -10,7 +10,7 @@ import PortableButton from "./../../components/PortableButton";
 import masterStyles, {listPage, bigButtonStyles} from "./../../styles/master";
 
 import DivisionManagementRow from "./DivisionManagementRow";
-import { getAllDivisions } from "../../redux/actions/divisionActions";
+import { getAllDivisions, deleteDivision } from "../../redux/actions/divisionActions";
 
 class DivisionManagmementScreen extends Component {
 
@@ -25,16 +25,6 @@ class DivisionManagmementScreen extends Component {
         this.props.getDivisions(1);
     }
 
-
-
-    _query = async () => {
-
-        // const sql = "SELECT * FROM DIVISION where DIVISION_PROGRAM_ID = ? ORDER BY DIVISION_NAME";
-
-        // let result = await query(this.db, sql, [this.state.programId]);
-        // this.setState({divisions: result.result});
-    }
-
     _addTeam = async (divisionId) => {
 
         console.log("Entered _addTeam()");
@@ -45,9 +35,7 @@ class DivisionManagmementScreen extends Component {
 
     _addDivision = () => {
 
-        // console.log("Entered _addDivision");
-
-        this.props.navigation.navigate("AddDivisionScreen", {refresh: () => this._query()});
+        this.props.navigation.navigate("AddDivisionScreen");
     }
 
     _editDivision = async (divisionId) => {
@@ -59,30 +47,14 @@ class DivisionManagmementScreen extends Component {
     }
 
 
+    _btnDeleteDivision = (divisionId) => {
 
-    _deleteDivision = async (divisionId) => {
-
-        // console.log("Entered _deleteDivision, divisionId: " + divisionId);
-
-        // const sql = "DELETE FROM DIVISION WHERE DIVISION_ID = ?";
-
-        // await execute(this.db, sql, [divisionId]);
-
-        // this._query();
-
-
-    }
-
-    _btnDeleteDivision = async (divisionId) => {
-
-        // console.log("Entered _btnDeleteDivision, divisionId: " + divisionId);
-
-        // Alert.alert("Are you sure?",
-        //     "You will not be able to undo this. Are you sure?",
-        //     [
-        //         {text: "Ok", onPress: ()=>{this._deleteDivision(divisionId)}},
-        //         {text: "Cancel"}
-        //     ]);
+        Alert.alert("Are you sure?",
+            "You will not be able to undo this. Are you sure?",
+            [
+                {text: "Ok", onPress: ()=>{this.props.deleteDivision(divisionId)}},
+                {text: "Cancel"}
+            ]);
     }
 
     _renderItem = ({item}) => (
@@ -123,7 +95,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getDivisions: (programId) => dispatch(getAllDivisions(programId))
+        getDivisions: (programId) => dispatch(getAllDivisions(programId)),
+        deleteDivision: (divisionId) => dispatch(deleteDivision(divisionId))
     }
 }
 
