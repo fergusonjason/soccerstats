@@ -93,6 +93,13 @@ export function deleteDivision(divisionId) {
     return (dispatch) => {
         let sql = "DELETE FROM DIVISION WHERE DIVISION_ID = ?";
         let params = [divisionId];
+        dispatch(isLoadingData(true));
+        executePromise(sql, params)
+            .then((queryResults) => {
+                dispatch(isLoadingData(false));
+            }).then(()=> {
+                dispatch(getAllDivisions(1));
+            })
     }
 }
 
