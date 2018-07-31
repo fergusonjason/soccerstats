@@ -23,6 +23,8 @@ class DivisionManagmementScreen extends Component {
         console.log("Entered componentDidMount()");
 
         this.props.getDivisions(1);
+
+        
     }
 
     _addTeam = async (divisionId) => {
@@ -38,11 +40,9 @@ class DivisionManagmementScreen extends Component {
         this.props.navigation.navigate("AddDivisionScreen");
     }
 
-    _editDivision = async (divisionId) => {
+    _editDivision = (divisionId) => {
 
-        // console.log("Entered _editDivision");
-
-        // this.props.navigation.navigate("EditDivisionScreen", {divisionId: divisionId, refresh: () => this._requery()});
+        this.props.navigation.navigate("EditDivisionScreen", {divisionId: divisionId});
 
     }
 
