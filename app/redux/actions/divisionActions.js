@@ -51,8 +51,16 @@ export function getDivisionSuccess(division) {
 
 export function addDivision(division) {
     return (dispatch) => {
-        let sql = "INSERT INTO DIVISION (DIVISION_NAME) VALUES (?)";
-        let params = [];
+        let sql = "INSERT INTO DIVISION (DIVISION_NAME, DIVISION_PROGRAM_ID) VALUES (?,?)";
+        let params = [division.DIVISION_NAME, division.DIVISION_PROGRAM_ID];
+
+        dispatch(isLoadingData(true));
+        executePromise(sql, params)
+            .then((queryResult) => {
+                dispatch(isLoadingData(false));
+            }).then(() => {
+                dispatch(getAllDivisions(1));
+            });
     }
 }
 
