@@ -26,21 +26,14 @@ class DivisionManagmementScreen extends Component {
         
     }
 
-    async componentDidMount() {
+    componentDidMount() {
 
         console.log("Entered componentDidMount()");
 
         this.props.getDivisions(1);
-        // this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-        // this._query();
     }
 
-    async componentWillUnmount() {
 
-        // console.log("Entered componentWillUnount()");
-
-        // await close(this.db);
-    }
 
     _query = async () => {
 
@@ -62,7 +55,7 @@ class DivisionManagmementScreen extends Component {
 
         // console.log("Entered _addDivision");
 
-        // this.props.navigation.navigate("AddDivisionScreen", {refresh: () => this._query()});
+        this.props.navigation.navigate("AddDivisionScreen", {refresh: () => this._query()});
     }
 
     _editDivision = async (divisionId) => {
