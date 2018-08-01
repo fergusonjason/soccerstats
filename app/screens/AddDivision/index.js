@@ -5,7 +5,7 @@ import {connect} from "react-redux";
 
 import PortableButton from "./../../components/PortableButton";
 
-import {addDivision} from "./../../redux/actions/divisionActions";
+import {addDivision, setCurrentDivisionId} from "./../../redux/actions/divisionActions";
 
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
 
@@ -21,11 +21,17 @@ class AddDivisionScreen extends Component {
 
         console.log("Entered _btnAdd");
 
-        let division = {DIVISION_NAME: this.state.DIVISION_NAME,
+        let division = {
+            DIVISION_NAME: this.state.DIVISION_NAME,
             DIVISION_PROGRAM_ID: 1};
         this.props.addDivision(division);
 
         this.props.navigation.navigate("DivisionManagementScreen",{programId: 1});
+    }
+
+    componentDidMount() {
+        let currentDivisionId = this.props.navigation.getParam("divisionId"); 
+        this.props.setCurrentDivisionId(currentDivisionId);
     }
 
     render() {
@@ -49,13 +55,14 @@ class AddDivisionScreen extends Component {
 
 function mapStateToProps(state) {
     return {
-    
+        currentDivisionId: state.currentDivisionId
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        addDivision: (division) => dispatch(addDivision(division))
+        addDivision: (division) => dispatch(addDivision(division)),
+        setCurrentDivisionId: (divisionId) => dispatch(setCurrentDivisionId(divisionId))
     }
 }
 export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(AddDivisionScreen));
