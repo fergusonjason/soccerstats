@@ -14,3 +14,5 @@
 ** Custom components
 ** Custom styles
 
+* After weeks of trying (not counting my day job and sleep), I managed to figure out Redux and Thunk. This will be important when I implement the Settings and the settings affect the rest of the app.
+
