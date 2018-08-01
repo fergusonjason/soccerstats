@@ -3,7 +3,7 @@ import {View, Text, TextInput, Picker} from "react-native";
 import {withNavigation} from "react-navigation";
 import {connect} from "react-redux";
 
-import {addTeam} from "./../../redux/actions/teamActions";
+import {addTeam, setCurrentTeamId} from "./../../redux/actions/teamActions";
 import {getAllCoaches} from "./../../redux/actions/utilityActions";
 
 import PortableButton from "./../../components/PortableButton";
@@ -83,14 +83,17 @@ class AddTeam extends Component {
 
 function mapStateToProps(state) {
     return {
-        coaches: state.coaches
+        coaches: state.coaches,
+        currentDivisionId: state.currentDivisionId,
+        currentTeamId: state.currentTeamId
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         addTeam: (teamObj) => dispatch(addTeam(teamObj)),
-        getAllCoaches: () => dispatch(getAllCoaches())
+        getAllCoaches: () => dispatch(getAllCoaches()),
+        setCurrentTeamId: (teamId) => dispatch(setCurrentTeamId(teamId))
     }
 }
 

@@ -8,7 +8,7 @@ import {connect} from "react-redux";
 import TeamManagementRow from "./TeamManagementRow";
 import PortableButton from "./../../components/PortableButton";
 
-import {getAllTeams,deleteTeam} from "./../../redux/actions/teamActions";
+import {getAllTeams,deleteTeam, setCurrentTeamId} from "./../../redux/actions/teamActions";
 import {setCurrentDivisionId} from "./../../redux/actions/divisionActions";
 
 import masterStyles, {listPage} from "./../../styles/master";
@@ -27,6 +27,7 @@ class TeamManagementScreen extends Component {
 
         let divisionId = this.props.navigation.getParam("divisionId");
         this.props.setCurrentDivisionId(divisionId);
+        this.props.setCurrentTeamId(-1);
         this.props.getTeams(divisionId);
     }
 
@@ -96,7 +97,8 @@ function mapStateToProps(state) {
 
     return {
         teams: state.teams,
-        currentDivisionId: state.currentDivisionId
+        currentDivisionId: state.currentDivisionId,
+        currentTeamId: state.currentTeamId
     }
 }
 
@@ -105,7 +107,8 @@ function mapDispatchToProps(dispatch) {
     return {
         getTeams: (divisionId) => {dispatch(getAllTeams(divisionId))},
         deleteTeam: (teamId) => {dispatch(deleteTeam(teamId))},
-        setCurrentDivisionId: (divisionId) => { dispatch(setCurrentDivisionId(divisionId))}
+        setCurrentDivisionId: (divisionId) => { dispatch(setCurrentDivisionId(divisionId))},
+        setCurrentTeamId: (teamId) => { dispatch(setCurrentTeamId(teamId))}
     }
 }
 

@@ -4,7 +4,7 @@ import {View,Text, TextInput, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 import {connect} from "react-redux";
 
-import {getTeam, editTeam} from "./../../redux/actions/teamActions";
+import {getTeam, editTeam, setCurrentTeamId} from "./../../redux/actions/teamActions";
 
 import PortableButton from "./../../components/PortableButton";
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
@@ -24,6 +24,7 @@ class EditTeam extends Component {
     componentDidMount() {
         console.log(`Props: ${JSON.stringify(this.props)}`);
         let teamId = this.props.navigation.getParam("teamId");
+        this.props.setCurrentTeamId(teamId);
         this.props.getTeam(teamId);
 
     }
@@ -74,7 +75,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         getTeam: (teamId) => dispatch(getTeam(teamId)),
-        editTeam: (teamObj) => dispatch(editTeam(teamObj))
+        editTeam: (teamObj) => dispatch(editTeam(teamObj)),
+        setCurrentTeamId: (teamId) => dispatch(setCurrentTeamId(teamId))
     }
 }
+
 export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(EditTeam));
