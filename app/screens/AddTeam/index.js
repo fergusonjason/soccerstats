@@ -3,9 +3,9 @@ import {View, Text, TextInput, Picker} from "react-native";
 import {withNavigation} from "react-navigation";
 import {connect} from "react-redux";
 
-import {open, execute, close, query} from "./../../util/DbUtils";
-
 import {addTeam} from "./../../redux/actions/teamActions";
+import {getAllCoaches} from "./../../redux/actions/utilityActions";
+
 import PortableButton from "./../../components/PortableButton";
 
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
@@ -15,27 +15,34 @@ class AddTeam extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {TEAM_NAME: "",
-            TEAM_DIVISION_ID: -1,
+        this.state = {
+            //TEAM_NAME: "",
+            //TEAM_DIVISION_ID: -1,
             TEAM_COACH_ID: -1,
-            TEAM_GENDER: "M",
-            coachList: []
+            TEAM_GENDER: "M"
+            //coachList: []
         }
     }
 
 
-    _btnAdd = async () => {
+    _btnAdd = () => {
 
         let divisionId = this.props.navigation.getParam("divisionId");
         let teamObj = {
             TEAM_NAME: this.state.TEAM_NAME,
-            TEAM_DIVISION_ID: this.state.TEAM_DIVISION_ID,
+            TEAM_DIVISION_ID: divisionId,
             TEAM_COACH_ID: this.state.TEAM_COACH_ID,
             TEAM_GENDER: this.state.TEAM_GENDER
         };
 
+        console.log(`teamObj: ${JSON.stringify(teamObj)}`);
         this.props.addTeam(teamObj);
         this.props.navigation.navigate("TeamManagementScreen",{divisionId: divisionId});
+    }
+
+    componentDidMount() {
+        this.props.getAllCoaches();
+        console.log(`props: ${JSON.stringify(this.props)}`);
     }
 
     render() {
@@ -53,10 +60,12 @@ class AddTeam extends Component {
                     </Picker>
                     <Text>Team Coach:</Text>
                     <Picker mode="dropdown"
+                        selectedValue={this.state.TEAM_COACH_ID}
                         onValueChange={(itemValue, itemIndex) => this.setState({"TEAM_COACH_ID": itemValue})}>
-                        {this.state.coachList.map((item) => {
-                            <Picker.Item label={item.COACH_LAST_NAME} value={item.COACH_ID} />
-                        })}
+                        <Picker.item label="" value={-1} />
+                        {this.props.coaches.map((item) => 
+                            <Picker.Item label={item.STAFF_LAST_NAME} value={item.STAFF_ID} />
+                        )}
                     </Picker>
 
                 </View>
@@ -74,13 +83,15 @@ class AddTeam extends Component {
 
 function mapStateToProps(state) {
     return {
-
+        coaches: state.coaches
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        addTeam: (teamObj) => dispatch(addTeam(teamObj))
+        addTeam: (teamObj) => dispatch(addTeam(teamObj)),
+        getAllCoaches: () => dispatch(getAllCoaches())
     }
 }
+
 export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(AddTeam));
