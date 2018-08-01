@@ -3,11 +3,14 @@
 import React, {Component} from "react";
 import {View, FlatList, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
+import {connect} from "react-redux";
 
 import {open, close, query, execute} from "./../../util/DbUtils";
 
 import TeamManagementRow from "./TeamManagementRow";
 import PortableButton from "./../../components/PortableButton";
+
+import {getAllTeams,deleteTeam} from "./../../redux/actions/teamActions";
 
 import masterStyles, {listPage} from "./../../styles/master";
 import styles, {bigButtonStyles} from "./styles";
@@ -17,57 +20,39 @@ class TeamManagementScreen extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            divisionId: this.props.navigation.getParam("divisionId"),
-            teams: []
-        }
     }
 
     async componentDidMount() {
 
         console.log("Entered componentDidMount()");
 
-        this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-        this._query();
+        let divisionId = this.props.navigation.getParam("divisionId");
+        this.props.getTeams(divisionId);
     }
 
-    async componentWillUnmount() {
 
-        await close(this.db);
-    }
+    _btnDeleteTeam = (teamId) => {
 
-    _query = async () => {
+        Alert.alert("Are You Sure?",
+            "You will not be able to undo this action. Continue?",
+            [
+                {text: "Ok", onPress: () => {this.props.deleteTeam(teamId)}},
+                {text: "Cancel"}
+            ]);
 
-        console.log("Entered _query");
-        const sql = "SELECT * FROM TEAM WHERE TEAM_DIVISION_ID = ?";
-        let result = await query(this.db, sql, [this.state.divisionId]);
-
-        this.setState({teams: result.result});
-    }
-
-    _btnDeleteTeam = async (teamId) => {
-
-        await _deleteTeam(teamId);
-        await _query();
-    }
-
-    _deleteTeam = async (teamId) => {
-
-        const sql = "DELETE FROM TEAM WHERE TEAM_ID = ?";
-        let result = await execute(this.db, sql, [teamId]);
     }
 
     _btnEditTeam = (teamId) => {
-        console.log("Entered _btnEditTeam, teamId: " + teamId);
-        this.props.navigation.navigate("EditTeamScreen",{teamId: teamId, divisionId: this.state.divisionId, refresh: () => this._query()});
+        let divisionId = this.props.navigation.getParam("divisionId");
+        this.props.navigation.navigate("EditTeamScreen",{teamId: teamId, divisionId: divisionId});
     }
 
     _btnAddPlayers = (teamId) => {
-        this.props.navigation.navigate("Add Players", {teamId: teamId, refresh: () => this._query()});
+        this.props.navigation.navigate("Add Players", {teamId: teamId});
     }
 
     _btnAddTeam = () => {
-        this.props.navigation.navigate("AddTeamScreen", {divisionId: this.state.divisionId, refresh: () => this._query()});
+        this.props.navigation.navigate("AddTeamScreen", {divisionId: this.state.divisionId});
     }
 
     _renderItem = ({item}) => {
@@ -86,7 +71,7 @@ class TeamManagementScreen extends Component {
             <View style={masterStyles.component} >
                 <View styles={listPage.listArea}>
                     <FlatList
-                        data={this.state.teams}
+                        data={this.props.teams}
                         renderItem={this._renderItem}
                         keyExtractor={(item) => item.TEAM_ID.toString()} />
                 </View>
@@ -102,4 +87,19 @@ class TeamManagementScreen extends Component {
     }
 }
 
-export default withNavigation(TeamManagementScreen);
+function mapStateToProps(state) {
+
+    return {
+        teams: state.teams
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+
+    return {
+        getTeams: (divisionId) => {dispatch(getAllTeams(divisionId))},
+        deleteTeam: (teamId) => {dispatch(deleteTeam(teamId))}
+    }
+}
+
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(TeamManagementScreen));

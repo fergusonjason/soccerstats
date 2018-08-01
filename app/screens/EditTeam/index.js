@@ -2,8 +2,9 @@
 import React, {Component} from "react";
 import {View,Text, TextInput, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
+import {connect} from "react-redux";
 
-import {open, query, execute, close} from "./../../util/DbUtils";
+import {getTeam, editTeam} from "./../../redux/actions/teamActions";
 
 import PortableButton from "./../../components/PortableButton";
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
@@ -20,37 +21,26 @@ class EditTeam extends Component {
         };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
 
-        this.db = await open({name: "stats.db", createFromLocation: "~soccerstats.db"});
+        let teamId = this.props.navigation.getParam("teamId");
+        this.props.getTeam(teamId);
 
-        const sql = "SELECT * FROM TEAM WHERE TEAM_ID=?";
-        let result = await query(this.db, sql, [this.state.teamId]);
-
-        console.log("TEAM NAME: " + result.result[0].TEAM_NAME);
-        this.setState({"TEAM_NAME": result.result[0].TEAM_NAME});
     }
 
-    async componentWillUnmount() {
-        await close(this.db);
-    }
 
-    _btnPress = async () => {
+    _btnPress = () => {
 
         console.log("Entered _btnPress()");
-
-        const sql = "UPDATE TEAM SET TEAM_NAME=? WHERE TEAM_ID=?";
-        let result = await execute(this.db, sql, [this.state.TEAM_NAME, this.state.teamId]);
-
-        if (result.rowsAffected == 0) {
-            Alert("Database error",
-                "Unable to update database",
-                [{text: "Ok"}]);
-        } else {
-
-            this.props.navigation.state.params.refresh();
-            this.props.navigation.navigate("TeamManagementScreen", {divisionId: this.state.divisionId});
+        let teamObj = {
+            TEAM_NAME: this.state.TEAM_NAME,
+            TEAM_ID: this.state.TEAM_ID
         }
+
+        this.props.editTeam(teamObj);
+
+        this.props.navigation.navigate("TeamManagementScreen", {divisionId: this.state.divisionId});
+
     }
 
     render() {
@@ -58,7 +48,7 @@ class EditTeam extends Component {
             <View style={masterStyles.component}>
                 <View style={dataEntryPage.inputSection}>
                     <Text>Team Name</Text>
-                    <TextInput value={this.state.TEAM_NAME}
+                    <TextInput value={this.props.team.TEAM_NAME}
                         onChangeText={(text) => {this.setState({"TEAM_NAME": text})}} />
                 </View>
                 <View style={dataEntryPage.bottomButtonArea}>
@@ -73,4 +63,17 @@ class EditTeam extends Component {
     }
 }
 
-export default withNavigation(EditTeam);
+function mapStateToProps(state) {
+
+    return {
+        team: state.team
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        getTeam: (teamId) => dispatch(getTeam(teamId)),
+        editTeam: (teamObj) => dispatch(editTeam(teamObj))
+    }
+}
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(EditTeam));

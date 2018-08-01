@@ -1,9 +1,11 @@
 import React, {Component} from "react";
 import {View, Text, TextInput, Picker} from "react-native";
 import {withNavigation} from "react-navigation";
+import {connect} from "react-redux";
 
 import {open, execute, close, query} from "./../../util/DbUtils";
 
+import {addTeam} from "./../../redux/actions/teamActions";
 import PortableButton from "./../../components/PortableButton";
 
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
@@ -13,8 +15,6 @@ class AddTeam extends Component {
     constructor(props) {
         super(props);
 
-        //this.state = {TEAM_NAME: ""}
-
         this.state = {TEAM_NAME: "",
             TEAM_DIVISION_ID: -1,
             TEAM_COACH_ID: -1,
@@ -23,40 +23,19 @@ class AddTeam extends Component {
         }
     }
 
-    async componentDidMount() {
-        this.db = await open({name: "stats.db",createFromLocation: "~soccerstats.db"});
-    }
-
-    async componentWillUnmount() {
-        await close(this.db);
-    }
-
-    _query = async () => {
-
-        const coachSql = "SELECT * FROM STAFF WHERE STAFF_IS_COACH = 1 ORDER BY STAFF_LAST_NAME";
-        let result = await query(this.db, coachSql, []);
-
-        this.setState({coachList: result.result});
-
-    }
-
-    _add = async () => {
-
-        // TODO: Eventually we have to prevent too many kids being put on a team. Probably
-        // need a db table to store the max number of players based on division
-
-        let divisionId = this.props.navigation.getParam("divisionId");
-
-        const sql = "INSERT INTO TEAM(TEAM_NAME, TEAM_DIVISION_ID, TEAM_COACH_ID, TEAM_GENDER) VALUES (?,?,?,?)";
-        await execute(this.db, sql, [this.state.TEAM_NAME, divisionId, null, this.state.TEAM_GENDER]);
-
-        this.props.navigation.state.params.refresh();
-        this.props.navigation.navigate("TeamManagementScreen",{divisionId: divisionId});
-    }
 
     _btnAdd = async () => {
 
-        this._add();
+        let divisionId = this.props.navigation.getParam("divisionId");
+        let teamObj = {
+            TEAM_NAME: this.state.TEAM_NAME,
+            TEAM_DIVISION_ID: this.state.TEAM_DIVISION_ID,
+            TEAM_COACH_ID: this.state.TEAM_COACH_ID,
+            TEAM_GENDER: this.state.TEAM_GENDER
+        };
+
+        this.props.addTeam(teamObj);
+        this.props.navigation.navigate("TeamManagementScreen",{divisionId: divisionId});
     }
 
     render() {
@@ -93,4 +72,15 @@ class AddTeam extends Component {
     }
 }
 
-export default withNavigation(AddTeam);
+function mapStateToProps(state) {
+    return {
+
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        addTeam: (teamObj) => dispatch(addTeam(teamObj))
+    }
+}
+export default withNavigation(connect(mapStateToProps, mapDispatchToProps)(AddTeam));
