@@ -3,14 +3,12 @@ import {View, FlatList, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 import {connect} from "react-redux";
 
-import {open,query,close} from "./../../util/DbUtils";
-
 import PortableButton from "./../../components/PortableButton";
 
 import masterStyles, {listPage, bigButtonStyles} from "./../../styles/master";
 
 import DivisionManagementRow from "./DivisionManagementRow";
-import { getAllDivisions, deleteDivision } from "../../redux/actions/divisionActions";
+import { getAllDivisions, deleteDivision, setCurrentDivisionId } from "../../redux/actions/divisionActions";
 
 class DivisionManagmementScreen extends Component {
 
@@ -21,13 +19,13 @@ class DivisionManagmementScreen extends Component {
     componentDidMount() {
 
         console.log("Entered componentDidMount()");
-
+        this.props.setCurrentDivisionId(-1);
         this.props.getDivisions(1);
 
         
     }
 
-    _addTeam = async (divisionId) => {
+    _addTeam = (divisionId) => {
 
         console.log("Entered _addTeam()");
         
@@ -49,6 +47,7 @@ class DivisionManagmementScreen extends Component {
 
     _btnDeleteDivision = (divisionId) => {
 
+        console.log(`Props: ${JSON.stringify(this.props)}`);
         Alert.alert("Are you sure?",
             "You will not be able to undo this. Are you sure?",
             [
@@ -89,14 +88,16 @@ class DivisionManagmementScreen extends Component {
 
 function mapStateToProps(state) {
     return {
-        divisions: state.divisions
+        divisions: state.divisions,
+        currentDivisionId: state.currentDivisionId
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
         getDivisions: (programId) => dispatch(getAllDivisions(programId)),
-        deleteDivision: (divisionId) => dispatch(deleteDivision(divisionId))
+        deleteDivision: (divisionId) => dispatch(deleteDivision(divisionId)),
+        setCurrentDivisionId: (divisionId) => dispatch(setCurrentDivisionId(divisionId))
     }
 }
 
