@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 
 import PortableButton from "./../../components/PortableButton";
 
-import {getDivision} from "./../../redux/actions/divisionActions";
+import {getDivision, setCurrentDivisionId} from "./../../redux/actions/divisionActions";
 
 import masterStyles, {dataEntryPage, bigButtonStyles} from "./../../styles/master";
 
@@ -20,10 +20,10 @@ class EditDivisionScreen extends Component {
         };
     }
 
-    async componentDidMount() {
+    componentDidMount() {
 
         let divisionId = this.props.navigation.getParam("divisionId");
-
+        this.props.setCurrentDivisionId(divisionId);
         this.props.getDivision(divisionId);
 
     }
@@ -31,6 +31,7 @@ class EditDivisionScreen extends Component {
     _btnUpdate = () => {
 
             let division = {
+                DIVISION_ID: this.props.divisionId,
                 DIVISION_NAME: this.state.DIVISION_NAME
             }
 
@@ -70,7 +71,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         getDivision: (divisionId) => {dispatch(getDivision(divisionId))},
-        editDivision: (division) => {dispatch(editDivision(division))}
+        editDivision: (division) => {dispatch(editDivision(division))},
+        setCurrentDivisionId: (divisionId) => {dispatch(setCurrentDivisionId(divisionId))}
     }
 }
 
