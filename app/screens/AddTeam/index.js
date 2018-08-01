@@ -30,14 +30,14 @@ class AddTeam extends Component {
         let divisionId = this.props.navigation.getParam("divisionId");
         let teamObj = {
             TEAM_NAME: this.state.TEAM_NAME,
-            TEAM_DIVISION_ID: divisionId,
+            TEAM_DIVISION_ID: this.props.currentDivisionId,
             TEAM_COACH_ID: this.state.TEAM_COACH_ID,
             TEAM_GENDER: this.state.TEAM_GENDER
         };
 
         console.log(`teamObj: ${JSON.stringify(teamObj)}`);
         this.props.addTeam(teamObj);
-        this.props.navigation.navigate("TeamManagementScreen",{divisionId: divisionId});
+        this.props.navigation.navigate("TeamManagementScreen",{divisionId: this.props.currentDivisionId});
     }
 
     componentDidMount() {
