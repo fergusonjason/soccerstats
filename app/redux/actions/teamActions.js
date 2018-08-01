@@ -1,7 +1,7 @@
 // /app/redux/actions/teamActions.js
 
 import { EDIT_TEAM_SUCCESS, ADD_TEAM_SUCCESS, GET_TEAM_SUCCESS, GET_ALL_TEAMS_SUCCESS, DELETE_TEAM_SUCCESS } from "./actionTypes";
-import {isLoading} from "./utilityActions";
+import {isLoadingData} from "./utilityActions";
 import {queryPromise, executePromise} from "./../../util/DbUtils";
 
 export function getAllTeams(divisionId) {
@@ -9,10 +9,10 @@ export function getAllTeams(divisionId) {
     return (dispatch) => {
         const sql = "SELECT * FROM TEAM WHERE TEAM_DIVISION_ID = ?";
         const params = [divisionId];
-        dispatch(isLoading(true));
+        dispatch(isLoadingData(true));
         queryPromise(sql, params)
             .then((queryResults) => {
-                dispatch(isLoading(false));
+                dispatch(isLoadingData(false));
                 return queryResults;
             }).then((queryResults) => {
                 dispatch(getAllTeamsSuccess(queryResults.result));
@@ -35,12 +35,12 @@ export function getTeam(teamId) {
     return (dispatch) => {
         const sql = "SELECT * FROM TEAM WHERE TEAM_ID = ?";
         const params = [teamId];
-        dispatch(isLoading(true));
+        dispatch(isLoadingData(true));
         queryPromise(sql, params)
             .then((queryResults) => {
-                dispatch(isLoading(false));
+                dispatch(isLoadingData(false));
                 return queryResults;
-            }).then((query) => {
+            }).then((queryResults) => {
                 dispatch(getTeamSuccess(queryResults.result[0]));
             });
     }
@@ -62,10 +62,10 @@ export function addTeam(teamObj) {
         const sql = "INSERT INTO TEAM(TEAM_NAME, TEAM_DIVISION_ID, TEAM_COACH_ID, TEAM_GENDER) " +
             "VALUES (?,?,?,?)";
         const params = [teamObj.TEAM_NAME, teamObj.TEAM_DIVISION_ID, teamObj.TEAM_COACH_ID, teamObj.TEAM_GENDER];
-        dispatch(isLoading(true));
+        dispatch(isLoadingData(true));
         executePromise(sql, params)
             .then((queryResults) => {
-                dispatch(isLoading(true));
+                dispatch(isLoadingData(true));
             }).then(() => {
                 dispatch(getAllTeams(teamObj.TEAM_DIVISION_ID));
             })
@@ -88,10 +88,10 @@ export function editTeam(teamObj) {
         const sql = "UPDATE TEAM SET TEAM_NAME=?, TEAM_DIVISION_ID=?, TEAM_COACH_ID=?, TEAM_GENDER=? WHERE TEAM_ID = ?";
         const params = [teamObj.TEAM_NAME, teamObj.TEAM_DIVISION_ID, teamObj.TEAM_COACH_ID, teamObj.TEAM_GENDER,
             teamObj.TEAM_ID];
-        dispatch(isLoading(true));
+        dispatch(isLoadingData(true));
         executePromise(sql, params)
             .then((queryResult) => {
-                dispatch(isLoading(false));
+                dispatch(isLoadingData(false));
             }).then(() => {
                 dispatch(getAllTeams(teamObj.TEAM_DIVISION_ID));
             })
@@ -113,10 +113,10 @@ export function deleteTeam(teamId, divisionId) {
     return (dispatch) => {
         const sql = "DELETE FROM TEAM WHERE TEAM_ID = ?";
         const params = [teamId];
-        dispatch(isLoading(true));
+        dispatch(isLoadingData(true));
         executePromise(sql, params)
             .then((queryResults) => {
-                dispatch(isLoading(false));
+                dispatch(isLoadingData(false));
             }).then(() => {
                 dispatch(getAllTeams(divisionId));
             })
