@@ -1,6 +1,6 @@
 // /app/redux/actions/teamActions.js
 
-import { EDIT_TEAM_SUCCESS, ADD_TEAM_SUCCESS, GET_TEAM_SUCCESS, GET_ALL_TEAMS_SUCCESS, DELETE_TEAM_SUCCESS } from "./actionTypes";
+import { EDIT_TEAM_SUCCESS, ADD_TEAM_SUCCESS, GET_TEAM_SUCCESS, GET_ALL_TEAMS_SUCCESS, DELETE_TEAM_SUCCESS, SET_CURRENT_TEAM_ID } from "./actionTypes";
 import {isLoadingData} from "./utilityActions";
 import {queryPromise, executePromise} from "./../../util/DbUtils";
 
@@ -118,6 +118,7 @@ export function deleteTeam(teamId, divisionId) {
             .then((queryResults) => {
                 dispatch(isLoadingData(false));
             }).then(() => {
+                console.log(`Reloading divisions, div id: ${divisionId}`);
                 dispatch(getAllTeams(divisionId));
             })
     }
@@ -131,3 +132,11 @@ export function deleteTeamSuccess(teamId) {
 }
 
 //export function deleteTeamError() {}
+
+export function setCurrentTeamId(teamId) {
+    return {
+        type: SET_CURRENT_TEAM_ID,
+        teamId: teamId
+    }
+
+}
