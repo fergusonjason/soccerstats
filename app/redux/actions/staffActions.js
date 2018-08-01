@@ -67,9 +67,9 @@ export function addStaffMember(staffMember) {
 
     return (dispatch) => {
 
-        let sql = "INSERT INTO STAFF(STAFF_LAST_NAME, STAFF_FIRST_NAME, STAFF_EMAIL, STAFF_CELL) VALUES (?,?,?,?)";
+        let sql = "INSERT INTO STAFF(STAFF_LAST_NAME, STAFF_FIRST_NAME, STAFF_EMAIL, STAFF_CELL, STAFF_IS_COACH) VALUES (?,?,?,?,?)";
         let params = [staffMember.STAFF_LAST_NAME, staffMember.STAFF_FIRST_NAME, 
-            staffMember.STAFF_EMAIL, staffMember.STAFF_CELL];
+            staffMember.STAFF_EMAIL, staffMember.STAFF_CELL, staffMember.STAFF_IS_COACH];
 
         dispatch(isLoadingData(true));
 
