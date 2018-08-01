@@ -23,22 +23,25 @@ class AddStaffMemberScreen extends Component {
             STAFF_EMAIL: "",
             STAFF_CELL: "",
             STAFF_ID: -1,
-            STAFF_IS_COMMISIONER: -1,
-            STAFF_IS_COACH: -1
+            STAFF_IS_COMMISIONER: 0,
+            STAFF_IS_COACH: 0
         }
     }
 
-    _btnUpdate = async () => {
+    _btnAdd = async () => {
 
         console.log("Entered _btnUpdate");
 
-            let staffMember = {STAFF_LAST_NAME: this.state.STAFF_LAST_NAME,
-                STAFF_FIRST_NAME: this.state.STAFF_FIRST_NAME,
-                STAFF_EMAIL: this.state.STAFF_EMAIL,
-                STAFF_CELL: this.state.STAFF_CELL};
+        let staffMember = {STAFF_LAST_NAME: this.state.STAFF_LAST_NAME,
+            STAFF_FIRST_NAME: this.state.STAFF_FIRST_NAME,
+            STAFF_EMAIL: this.state.STAFF_EMAIL,
+            STAFF_CELL: this.state.STAFF_CELL,
+            STAFF_IS_COACH: this.state.STAFF_IS_COACH};
 
-            this.props.addStaffMember(staffMember);
-            this.props.navigation.navigate("StaffManagementScreen");
+            console.log(`staffMember: ${JSON.stringify(staffMember)}`);
+
+        this.props.addStaffMember(staffMember);
+        this.props.navigation.navigate("StaffManagementScreen");
 
     }
 
@@ -84,13 +87,13 @@ class AddStaffMemberScreen extends Component {
                          value={this.state.STAFF_CELL} />       
                     <Text>Coach</Text>
                     <Switch disabled={false}
-                        value = {true}
-                        onValueChange = {(value) => {value === true ? this.setState({STAFF_IS_COMMISIONER: 1}) : this.setState({"STAFF_IS_COMMISIONER": 0})}} 
+                        value = {this.state.STAFF_IS_COACH === 1}
+                        onValueChange = {(value) => {value === true ? this.setState({STAFF_IS_COACH: 1}) : this.setState({"STAFF_IS_COACH": 0})}} 
                     />
                 </View>
                 <View style={dataEntryPage.bottomButtonArea}>
                     <PortableButton defaultLabel="Add Staff Member"
-                        onPress={()=>this._btnUpdate()}
+                        onPress={()=>this._btnAdd()}
                         onLongPress={()=>{}}
                         style={bigButtonStyles} />
                 </View>
