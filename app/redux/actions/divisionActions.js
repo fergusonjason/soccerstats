@@ -1,6 +1,6 @@
 // /app/redux/actions/divisionActions.js
 
-import { ADD_DIVISION_SUCCESS, GET_ALL_DIVISIONS_SUCCESS, GET_DIVISION_SUCCESS, EDIT_DIVISION_SUCCESS, DELETE_DIVISION_SUCCESS } from "./actionTypes";
+import { ADD_DIVISION_SUCCESS, GET_ALL_DIVISIONS_SUCCESS, GET_DIVISION_SUCCESS, EDIT_DIVISION_SUCCESS, DELETE_DIVISION_SUCCESS, SET_CURRENT_DIVISION_ID } from "./actionTypes";
 import {queryPromise, executePromise } from "./../../util/DbUtils";
 import {isLoadingData} from "./utilityActions";
 
@@ -129,3 +129,10 @@ export function deleteDivisionSuccess(divisionId) {
 }
 
 //export function deleteDivisionError() {}
+
+export function setCurrentDivisionId(divisionId) {
+    return {
+        type: SET_CURRENT_DIVISION_ID,
+        divisionId: divisionId
+    }
+}

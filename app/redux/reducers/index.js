@@ -1,15 +1,19 @@
 // /app/redux/reducers/index.js
 
 import {combineReducers} from "redux";
-import {divisions, division} from "./divisionReducers";
+import {divisions, division, currentDivisionId} from "./divisionReducers";
 import {staffMembers, staffMember} from "./staffReducer";
 import {teams, team} from "./teamReducer";
+import {coaches, commisioners} from "./utilityReducer";
 
 export default rootReducer = combineReducers({
     divisions,
     division,
+    currentDivisionId,
     staffMembers,
     staffMember,
     teams,
-    team
+    team,
+    coaches,
+    commisioners
 });
