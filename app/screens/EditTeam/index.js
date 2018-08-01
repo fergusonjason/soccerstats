@@ -22,7 +22,7 @@ class EditTeam extends Component {
     }
 
     componentDidMount() {
-
+        console.log(`Props: ${JSON.stringify(this.props)}`);
         let teamId = this.props.navigation.getParam("teamId");
         this.props.getTeam(teamId);
 
@@ -66,7 +66,8 @@ class EditTeam extends Component {
 function mapStateToProps(state) {
 
     return {
-        team: state.team
+        team: state.team,
+        currentDivisionId: state.currentDivisionId
     }
 }
 
