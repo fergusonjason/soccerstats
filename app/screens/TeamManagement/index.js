@@ -5,15 +5,14 @@ import {View, FlatList, Alert} from "react-native";
 import {withNavigation} from "react-navigation";
 import {connect} from "react-redux";
 
-import {open, close, query, execute} from "./../../util/DbUtils";
-
 import TeamManagementRow from "./TeamManagementRow";
 import PortableButton from "./../../components/PortableButton";
 
 import {getAllTeams,deleteTeam} from "./../../redux/actions/teamActions";
+import {setCurrentDivisionId} from "./../../redux/actions/divisionActions";
 
 import masterStyles, {listPage} from "./../../styles/master";
-import styles, {bigButtonStyles} from "./styles";
+import {bigButtonStyles} from "./styles";
 
 class TeamManagementScreen extends Component {
 
@@ -22,21 +21,26 @@ class TeamManagementScreen extends Component {
 
     }
 
-    async componentDidMount() {
+    componentDidMount() {
 
         console.log("Entered componentDidMount()");
 
         let divisionId = this.props.navigation.getParam("divisionId");
+        this.props.setCurrentDivisionId(divisionId);
         this.props.getTeams(divisionId);
     }
 
 
     _btnDeleteTeam = (teamId) => {
 
+        console.log(`Props: ${JSON.stringify(this.props)}`);
+
+        let divisionId = this.props.navigation.getParam("divisionId");
+
         Alert.alert("Are You Sure?",
             "You will not be able to undo this action. Continue?",
             [
-                {text: "Ok", onPress: () => {this.props.deleteTeam(teamId)}},
+                {text: "Ok", onPress: () => {this.props.deleteTeam(teamId, divisionId)}},
                 {text: "Cancel"}
             ]);
 
@@ -52,7 +56,8 @@ class TeamManagementScreen extends Component {
     }
 
     _btnAddTeam = () => {
-        this.props.navigation.navigate("AddTeamScreen", {divisionId: this.state.divisionId});
+        let divisionId = this.props.navigation.getParam("divisionId");
+        this.props.navigation.navigate("AddTeamScreen", {divisionId: divisionId});
     }
 
     _renderItem = ({item}) => {
@@ -90,7 +95,8 @@ class TeamManagementScreen extends Component {
 function mapStateToProps(state) {
 
     return {
-        teams: state.teams
+        teams: state.teams,
+        currentDivisionId: state.currentDivisionId
     }
 }
 
@@ -98,7 +104,8 @@ function mapDispatchToProps(dispatch) {
 
     return {
         getTeams: (divisionId) => {dispatch(getAllTeams(divisionId))},
-        deleteTeam: (teamId) => {dispatch(deleteTeam(teamId))}
+        deleteTeam: (teamId) => {dispatch(deleteTeam(teamId))},
+        setCurrentDivisionId: (divisionId) => { dispatch(setCurrentDivisionId(divisionId))}
     }
 }
 
