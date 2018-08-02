@@ -46,12 +46,7 @@ class HomeScreen extends Component {
                 this.props.navigation.navigate("StaffManagementScreen");
                 break;
             case "Settings":
-                Alert.alert("Not implemented",
-                    "This component is not implemented",
-                    [
-                        {text: "Ok"}
-                    ]
-                );              
+                this.props.navigation.navigate("SettingsScreen");
                 break;
         }
     }
