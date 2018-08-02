@@ -35,7 +35,8 @@ class EditTeam extends Component {
         console.log("Entered _btnPress()");
         let teamObj = {
             TEAM_NAME: this.state.TEAM_NAME,
-            TEAM_ID: this.state.TEAM_ID
+            TEAM_ID: this.state.TEAM_ID,
+            TEAM_DIVISION_ID: this.props.currentDivisionId
         }
 
         this.props.editTeam(teamObj);
