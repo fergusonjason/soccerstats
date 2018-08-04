@@ -136,7 +136,7 @@ export function deleteTeamSuccess(teamId) {
 export function setCurrentTeamId(teamId) {
     return {
         type: SET_CURRENT_TEAM_ID,
-        teamId: teamId
+        currentTeamId: teamId
     }
 
 }
