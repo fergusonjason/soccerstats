@@ -14,7 +14,7 @@ export const isLoadingData = (isLoadingBool) => {
 export const getAllCoaches = () => {
 
     return (dispatch) => {
-        const sql = "SELECT * FROM V_COACHES";
+        const sql = "SELECT STAFF_ID, (STAFF_LAST_NAME || \", \" || STAFF_FIRST_NAME) AS STAFF_NAME FROM V_COACHES";
         const params = [];
         dispatch(isLoadingData(true));
         queryPromise(sql, params)
@@ -22,7 +22,7 @@ export const getAllCoaches = () => {
                 dispatch(isLoadingData(false));
                 return queryResults;
             }).then((queryResults) => {
-                console.log(`getAllCoaches result: ${JSON.stringify(queryResults)}`);
+                console.log(`getAllCoaches result: ${JSON.stringify(queryResults.result)}`);
                 dispatch(getAllCoachesSuccess(queryResults.result));
             });
     }
